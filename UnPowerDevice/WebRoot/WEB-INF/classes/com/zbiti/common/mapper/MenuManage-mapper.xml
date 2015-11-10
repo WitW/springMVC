@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.zbiti.common.mapper.MenuManageMapper">
+	<!-- id和mapper接口中的方法名对应，resultType使用mybatis.xml中的别名 -->
+
+ <select id="getAllMenu"  resultType="com.zbiti.common.model.Menu" resultMap="MenuInfoMap.menuInfoResultMap">
+ select m.*,
+       (case nvl(r1.menu_id, 0)
+         when 0 then
+          'false'
+         else
+          'true'
+       end) check_result
+  from unpower_device_menu m
+  left join (select * from unpower_device_role_menu r where r.role_id = #{roleId}) r1 on m.menu_id =
+                                                                            r1.menu_id
+ order by m.order_no
+ </select>
+
+  <select id="getFirstMenu"  resultType="com.zbiti.common.model.Menu" resultMap="MenuInfoMap.menuInfoResultMap">
+ select m.menu_id,m.menu_name,m.menu_level,m.menu_parent_id,m.order_no,m.href from unpower_device_menu m
+ where m.menu_level  = 1
+ order by m.order_no
+ </select>
+ 
+ <select id="getSecondMenu"  resultType="com.zbiti.common.model.Menu" resultMap="MenuInfoMap.menuInfoResultMap">
+  select max(m.menu_id) menu_id, max(m.order_no) order_no,max(m.menu_name) menu_name,max(m.menu_level) menu_level,max(m.menu_parent_id) menu_parent_id,
+  max(m.href) href,max(m.panel_id) panel_id 
+  from unpower_device_staff s
+  left join unpower_device_staff_role rs on s.staff_id = rs.staff_id
+  left join unpower_device_role r on r.role_id = rs.role_id
+  left join unpower_device_role_menu rm on r.role_id = rm.role_id
+  left join unpower_device_menu m on m.menu_id = rm.menu_id
+  where s.staff_id =#{staffId} 
+  and m.menu_parent_id in (select m1.menu_id from unpower_device_menu m1
+ where m1.menu_level  = 1)
+  group by rm.menu_id
+  order by order_no
+ </select>
+ 
+ <delete id="deleteRoleMenu">
+  delete from unpower_device_role_menu where role_id = #{roleId} 
+ </delete>
+ 
+ <insert id="insertRoleMenu">
+  insert into  unpower_device_role_menu(role_id,menu_id) values(#{roleId},#{menuId})
+ </insert>
+ 
+</mapper>

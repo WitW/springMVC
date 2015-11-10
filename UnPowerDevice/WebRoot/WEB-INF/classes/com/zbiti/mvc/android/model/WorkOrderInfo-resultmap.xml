@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WorkOrderInfoMap">
+	<resultMap type="com.zbiti.mvc.android.model.WorkOrderInfo" id="WorkOrderInfoResultMap">
+		<id property="workOrderId" column="work_order_id"/>
+		<result property="staffNbr" column="staff_nbr"/>
+		<result property="busyType" column="busy_type"/>
+		<result property="ponType" column="pon_type"/>
+		<result property="event" column="event"/>
+		<result property="completeTime" column="complete_date"/>
+		<result property="dredgeLevel" column="dredge_level"/>
+		<result property="orderStartTime" column="order_start_time"/>
+		<result property="customer" column="customer"/>
+		<result property="accessNum" column="access_num"/>
+		<result property="address" column="address"/>
+		<result property="telephone" column="telephone"/>
+		<result property="orderState" column="order_state"/>
+		<result property="oldRes" column="old_res"/>
+		<result property="newRes" column="new_res"/>
+		<result property="devPortNo" column="dev_port_no"/>
+	</resultMap>
+</mapper>

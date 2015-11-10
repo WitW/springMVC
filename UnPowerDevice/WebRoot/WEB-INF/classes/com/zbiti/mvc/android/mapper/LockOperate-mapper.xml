@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.zbiti.mvc.android.mapper.LockOperateMapper">
+	<!-- id和mapper接口中的方法名对应，resultType使用mybatis.xml中的别名 -->
+
+	<select id="getDevOpterateInfolistPage" resultMap="LockOperateInfoMap.LockOperateInfoResultMap">
+		select
+		DO.OPER_ID,to_char(DO.OPER_DATE,'yyyy-mm-dd hh24:mi:ss') as OPER_DATE,DO.PHOTO_PATH,DO.NOTE,DO.TYPE,PE.NO
+		as PHY_EQP_NO,PE.NAME AS DEVICE_NAME,UDS.STAFF_NBR,UDS.STAFF_NAME from DEV_OPRATION DO JOIN
+		${odnmain}.unpower_device_staff UDS ON DO.STAFF_ID=UDS.STAFF_ID
+		JOIN DEV_LOCK_MAN
+		DLM ON DLM.DPL_ID=DO.DPL_ID
+		JOIN PHY_EQUIPMENT PE ON
+		DLM.PHY_EQP_ID=PE.PHY_EQP_ID
+		
+	    <trim prefix="WHERE" prefixOverrides="AND |OR "> 
+      		<if test="map.deviceNo != null and map.deviceNo != '' ">  
+	                AND PE.NO like '%${map.deviceNo}%'
+	     	</if>
+	     	<if test="map.staffNbr != null and map.staffNbr != '' ">
+	     			AND UDS.STAFF_NBR like '%${map.staffNbr}%'
+	     	</if>
+	        <if test="map.staffName != null and map.staffName != '' ">
+	     			AND UDS.STAFF_NAME LIKE '%${map.staffName}%'
+	     	</if>
+	     	<if test="map.deviceName != null and map.deviceName != '' ">
+	     			AND PE.NAME LIKE '%${map.deviceName}%'
+	     	</if>
+        </trim>
+        order by DO.OPER_DATE desc
+	</select>
+
+	<insert id="insertDevLockInfo">
+		insert into
+		DEV_OPRATION(OPER_ID,STAFF_ID,DPL_ID,OPER_DATE,PHOTO_PATH,NOTE,TYPE)
+
+		values(SEQ_DEV_OPRATION_ID.Nextval,(select staff_Id from
+		${odnmain}.unpower_device_staff s where s.staff_nbr =
+		#{staffNbr,jdbcType=VARCHAR}),
+		( select dl.dpl_id from phy_equipment pe
+		join dev_lock_man dl on
+		dl.phy_eqp_id=pe.phy_eqp_id where
+		pe.no=#{deviceNo,jdbcType=VARCHAR}),
+		sysdate,#{photoPath,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR},#{type,jdbcType=NUMERIC})
+	</insert>
+
+	<select id="getDevState" resultType="String">
+		   select type from  ( select DO.type from DEV_OPRATION DO 
+      JOIN DEV_LOCK_MAN DLM ON DLM.DPL_ID=DO.DPL_ID
+      JOIN PHY_EQUIPMENT PE ON DLM.PHY_EQP_ID=PE.PHY_EQP_ID
+      where PE.NO=#{deviceNo}
+      ORDER BY DO.OPER_DATE DESC) where rownum=1
+	</select>
+
+	<update id="saveLockRfidTwocode">
+		MERGE INTO DEV_LOCK_MAN dlm
+		USING (select #{deviceId}
+		PHY_EQP_ID from dual) np
+		ON (np.PHY_EQP_ID = dlm.PHY_EQP_ID)
+		WHEN
+		MATCHED THEN
+		UPDATE SET dlm.lock_rfID = #{rfid}, dlm.two_dim_code =
+		#{twoDimCode},dlm.staff_nbr = #{staffNbr},dlm.input_date = sysdate
+		WHEN NOT MATCHED THEN
+		INSERT VALUES
+		(seq_dev_lock_man.nextval, #{deviceId}, #{rfid}, #{twoDimCode},#{staffNbr},sysdate,'2')
+	</update>
+
+	<select id="getDevIdByCode" resultType="map">
+		select t.phy_eqp_id from
+		PHY_EQUIPMENT t where t.no = #{deviceNo}
+	</select>
+	
+	<update id="updateDoorState">
+		update dev_lock_man  dlm set dlm.state=#{state,jdbcType=NUMERIC} 
+		where dlm.phy_eqp_id=(select pe.phy_eqp_id from phy_equipment pe where pe.no=#{deviceNo,jdbcType=VARCHAR})
+	</update>
+	
+	<update id="saveDevLockMan">
+		MERGE INTO DEV_LOCK_MAN dlm
+	    USING (select #{deviceId}
+	    PHY_EQP_ID from dual) np
+	    ON (np.PHY_EQP_ID = dlm.PHY_EQP_ID)
+	
+	    WHEN NOT MATCHED THEN
+	    INSERT VALUES
+	    (seq_dev_lock_man.nextval, #{deviceId}, null, null,#{staffNbr},sysdate,'2')
+	</update>
+	
+	<select id="getDplIdByPhyEqpId" resultType="String">
+		select l.dpl_id from DEV_LOCK_MAN l where l.phy_eqp_id=#{phyEqpId}
+	</select>
+	
+	<select id="getDeviceNoByRfid" resultType="String">
+		select pe.no from dev_lock_man l join phy_equipment pe on pe.phy_eqp_id=l.phy_eqp_id 
+		
+		<trim prefix="WHERE" prefixOverrides="AND |OR "> 
+		    <if test="deviceNo != null and deviceNo != '' ">  
+	                AND  pe.no=#{deviceNo}
+	     	</if>
+      		<if test="rfid != null and rfid != '' ">  
+	                AND  l.lock_rfid=#{rfid}
+	     	</if>
+	     	<if test="twoDimCode != null and twoDimCode != '' ">  
+	                AND  l.two_dim_code=#{twoDimCode}
+	     	</if>
+	    </trim>
+	</select>
+	
+	<select id="getDevLockInfo" resultType="map">
+		SELECT  L.LOCK_RFID, L.TWO_DIM_CODE FROM DEV_LOCK_MAN L WHERE (L.LOCK_RFID=#{rfid} OR  L.TWO_DIM_CODE=#{twoDimCode}) and  l.phy_eqp_id != #{deviceId,jdbcType=NUMERIC}
+	</select>
+	
+	<select id="getCountByRfidAndCode" resultType="map">
+	   select l.lock_rfid,l.two_dim_code
+       from dev_lock_man l
+       join phy_equipment pe
+         on pe.phy_eqp_id = l.phy_eqp_id
+      where (l.lock_rfid = #{rfid} or
+            l.two_dim_code = #{twoDimCode})
+        and pe.no != #{deviceNo}
+	</select>
+	
+	<select id="getOperationInfo" resultType="map">
+		 SELECT O.OPER_DATE,PE.NAME,O.TYPE,S.STAFF_NBR,P.LONGITUDE,P.LATITUDE
+		  FROM DEV_OPRATION O
+		  JOIN DEV_LOCK_MAN L
+		    ON L.DPL_ID = O.DPL_ID
+		  JOIN PHY_EQUIPMENT PE
+		    ON PE.PHY_EQP_ID = L.PHY_EQP_ID
+		    
+		  JOIN UNPOWER_DEVICE_STAFF S
+        
+        	ON S.STAFF_ID=O.STAFF_ID
+        	
+        LEFT JOIN DEV_POSITION P
+          ON P.DEVICE_ID=L.PHY_EQP_ID
+		    
+		    WHERE  PE.NO=#{deviceNo} and rownum =1 
+	    
+		 ORDER BY O.OPER_DATE DESC
+		
+	</select>
+</mapper>

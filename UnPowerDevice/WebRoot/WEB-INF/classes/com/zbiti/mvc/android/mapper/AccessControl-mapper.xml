@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.zbiti.mvc.android.mapper.AccessControlMapper">
+	<!-- id和mapper接口中的方法名对应，resultType使用mybatis.xml中的别名 -->
+	
+	<!--  -->
+	<select id="listTimeRange" resultType="map">
+		select OP_TIME_ID,NAME,MON_START_TIME,MON_END_TIME,
+			TUES_START_TIME,TUES_END_TIME,WED_START_TIME,WED_END_TIME,THUR_START_TIME,
+			THUR_END_TIME,FRI_START_TIME,FRI_END_TIME,SAT_START_TIME,SAT_END_TIME,
+			SUN_START_TIME,SUN_END_TIME 
+		from OPERATE_TIME 
+	</select>
+	
+	<!--  -->
+	<select id="getTimeRange" resultMap="OperateTimeMap.OperateTimeResultMap">
+		select OP_TIME_ID,NAME,MON_START_TIME,MON_END_TIME,
+		TUES_START_TIME,TUES_END_TIME,WED_START_TIME,WED_END_TIME,THUR_START_TIME,
+		THUR_END_TIME,FRI_START_TIME,FRI_END_TIME,SAT_START_TIME,SAT_END_TIME,
+		SUN_START_TIME,SUN_END_TIME 
+		from OPERATE_TIME 
+		
+		WHERE rownum=1 
+		<if test="opTimeId != null and opTimeId != '' ">  
+			and OP_TIME_ID=#{opTimeId}
+		</if>
+		
+	</select>
+	
+	<!--  -->
+	<update id="updateTimeRange">
+		update  OPERATE_TIME  set NAME=#{name,jdbcType=VARCHAR},MON_START_TIME=#{monStartTime,jdbcType=VARCHAR},MON_END_TIME=#{monEndTime,jdbcType=VARCHAR},
+		TUES_START_TIME = #{tuesStartTime,jdbcType=VARCHAR},TUES_END_TIME=#{tuesEndTime,jdbcType=VARCHAR},WED_START_TIME=#{wedStartTime,jdbcType=VARCHAR},WED_END_TIME=#{wedEndTime,jdbcType=VARCHAR},
+		THUR_START_TIME = #{thurStartTime,jdbcType=VARCHAR},THUR_END_TIME=#{thurEndTime,jdbcType=VARCHAR},FRI_START_TIME=#{friStartTime,jdbcType=VARCHAR},
+		FRI_END_TIME=#{friEndTime,jdbcType=VARCHAR},SAT_START_TIME=#{satStartTime,jdbcType=VARCHAR},SAT_END_TIME=#{satEndTime,jdbcType=VARCHAR},SUN_START_TIME=#{sunStartTime,jdbcType=VARCHAR},
+		SUN_END_TIME=#{sunEndTime,jdbcType=VARCHAR}  where OP_TIME_ID=#{opTimeId,jdbcType=NUMERIC}
+	</update>
+	
+	<!-- 保存用户锁具设备权限 -->
+	<insert id="insertDevsStaff">
+		INSERT INTO DEV_STAFF  SELECT #{staffId}, DPL_ID,1 FROM DEV_LOCK_MAN WHERE  PHY_EQP_ID=#{deviceId}
+	</insert>
+	
+	<!--  -->
+	<select id="listDevIdsByStaffId" resultType="String">
+		 SELECT DL.Phy_Eqp_Id FROM DEV_LOCK_MAN DL join DEV_STAFF DS on DS.DPL_ID=DL.DPL_ID  where DS.Staff_Id=#{staffId}
+	</select>
+	
+	<!--  -->
+	<delete id="deleteDevsStaff">
+		delete from DEV_STAFF where staff_id=#{staffId}
+	</delete>
+	
+	<!--  -->
+	<select id="getDevLockInfo" resultType="map">
+      select PE.NO as DEVICE_NO,DL.LOCK_RFID,DL.TWO_DIM_CODE from DEV_LOCK_MAN  DL join DEV_STAFF DS on DS.DPL_ID=DL.DPL_ID 
+      join ${odnmain}.unpower_device_staff ST on ST.STAFF_ID=DS.STAFF_ID
+      join  PHY_EQUIPMENT PE on DL.PHY_EQP_ID=PE.PHY_EQP_ID
+      where ST.STAFF_NBR=#{staffNbr}
+	</select>
+	
+	<!-- 查询设备位置 -->
+	<select id="getDevicePosition" resultType="map">
+       select DP.Longitude,DP.LATITUDE from DEV_POSITION DP 
+      
+      join  PHY_EQUIPMENT PE on PE.PHY_EQP_ID=DP.DEVICE_ID
+      
+      JOIN DEV_LOCK_MAN DLM ON DLM.PHY_EQP_ID=PE.PHY_EQP_ID
+      
+      where PE.NO LIKE '%${map.deviceNo}%'
+	</select>
+	
+	<select id="getDevicePositionlistPage" resultType="com.zbiti.mvc.android.model.DeviceMapInfo">
+       select DP.Longitude,DP.LATITUDE,PE.No as deviceNo,PE.Name as deviceName,DLM.STATE,to_char(T.OPER_DATE,'yyyy-mm-dd hh24:mi:ss') as operDate,T.staff_nbr as staffNbr from DEV_POSITION DP 
+      
+      join  PHY_EQUIPMENT PE on PE.PHY_EQP_ID=DP.DEVICE_ID
+      
+      JOIN DEV_LOCK_MAN DLM ON DLM.PHY_EQP_ID=PE.PHY_EQP_ID
+      
+      left join (select DOP.DPL_ID,DOP.Type, DOP.OPER_DATE,uds.staff_nbr from  (select DO.Dpl_Id,max(DO.OPER_DATE) as OPER_DATE  from DEV_OPRATION DO group by DO.Dpl_Id) tmp join DEV_OPRATION DOP
+            on tmp.Dpl_Id=DOP.DPL_ID and  tmp.OPER_DATE=DOP.OPER_DATE
+            join ${odnmain}.unpower_device_staff uds on DOP.Staff_Id=uds.staff_id
+            ) T
+     on T.DPL_ID=DLM.DPL_ID
+     
+      <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      	 <if test="map.deviceNo != null and map.deviceNo != '' ">  
+	                AND PE.NO LIKE '%${map.deviceNo}%'
+	     </if>  
+      </trim>
+	</select>
+	
+	<select id="getDplidByDevNos" resultType="String">
+	   select lm.dpl_id from dev_lock_man lm where lm.phy_eqp_id in (select p.phy_eqp_id from phy_equipment p where p.no in
+	   
+	    <foreach collection="list" index="index" item="devNos" open="(" separator="," close=")">  
+        	#{devNos}
+    	</foreach>
+	    )
+       union
+       
+       select l.dpl_id from dev_lock_man l join  phy_equipment p on l.phy_eqp_id=p.phy_eqp_id  join phy_eqp_unit u on p.phy_eqp_id=u.phy_eqp_id 
+       
+       and u.unit_id in (select pe.install_unit_id from phy_equipment pe where pe.no in
+        <foreach collection="list" index="index" item="devNos" open="(" separator="," close=")">  
+        	#{devNos}
+    	</foreach>
+    	)
+	</select>
+	
+	<update id="saveStaffAccess">
+	       MERGE INTO dev_staff ds
+      USING (select s.staff_id,#{dplid} as  dplid  from unpower_device_staff s where s.staff_nbr=#{staffNbr}) np
+      ON (ds.staff_id=np.staff_id and ds.dpl_id=np.dplid)
+
+      WHEN MATCHED THEN
+           update set DS.TYPE=3 WHERE DS.TYPE=1
+      WHEN NOT MATCHED THEN
+        INSERT
+        VALUES
+          (np.staff_id,np.dplid,2)
+	</update>
+	
+	<select id="getStaffDevInfo" resultType="map">
+		select ds.dpl_id,ds.type from dev_staff ds join ${odnmain}.unpower_device_staff s 
+		on s.staff_id=ds.staff_id 
+		where s.staff_nbr=#{staffNbr} 
+		and ds.dpl_id not in
+		
+		 <foreach collection="dplids" index="index" item="dplids" open="(" separator="," close=")">  
+        	#{dplids}
+    	</foreach>
+	</select>
+	
+	<!--  -->
+	<delete id="deleteDevsByStaffNbr">
+		delete  from dev_staff ds  where ds.staff_id=(select s.staff_id 
+		from ${odnmain}.unpower_device_staff s where s.staff_nbr=#{staffNbr}) and ds.dpl_id=#{dplid}
+	</delete>
+	
+	<update id="updateDevStaffType">
+		update dev_staff ds   set ds.type=1  where ds.staff_id=(select s.staff_id 
+		from ${odnmain}.unpower_device_staff s where s.staff_nbr=#{staffNbr}) and ds.dpl_id=#{dplid}
+	</update>
+	
+	<select id="getTopPhyIdByNo" resultType="String">
+		select p.phy_eqp_id from phy_equipment p where p.no = #{deviceNo} and p.res_spec_id=703
+      union
+	select  p.phy_eqp_id from  phy_equipment p  join phy_eqp_unit u on p.phy_eqp_id=u.phy_eqp_id 
+       
+  	and u.unit_id in (select pe.install_unit_id from phy_equipment pe where pe.no =#{deviceNo}) and p.res_spec_id=703
+	</select>
+	
+	
+	
+	<select id="getDevicePositionList" resultType="com.zbiti.mvc.android.model.DeviceMapInfo">
+       select DP.Longitude,DP.LATITUDE,PE.No as deviceNo,PE.Name as deviceName,DLM.STATE,to_char(T.OPER_DATE,'yyyy-mm-dd hh24:mi:ss') as operDate,T.staff_nbr as staffNbr from DEV_POSITION DP 
+      
+      join  PHY_EQUIPMENT PE on PE.PHY_EQP_ID=DP.DEVICE_ID
+      
+      JOIN DEV_LOCK_MAN DLM ON DLM.PHY_EQP_ID=PE.PHY_EQP_ID
+      
+      left join (select DOP.DPL_ID,DOP.Type, DOP.OPER_DATE,uds.staff_nbr from  (select DO.Dpl_Id,max(DO.OPER_DATE) as OPER_DATE  from DEV_OPRATION DO group by DO.Dpl_Id) tmp join DEV_OPRATION DOP
+            on tmp.Dpl_Id=DOP.DPL_ID and  tmp.OPER_DATE=DOP.OPER_DATE
+            join ${odnmain}.unpower_device_staff uds on DOP.Staff_Id=uds.staff_id
+            ) T
+     on T.DPL_ID=DLM.DPL_ID
+     
+      <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      	 <if test="map.deviceNo != null and map.deviceNo != '' ">  
+	                AND PE.NO=#{map.deviceNo}
+	     </if>  
+      </trim>
+	</select>
+</mapper>

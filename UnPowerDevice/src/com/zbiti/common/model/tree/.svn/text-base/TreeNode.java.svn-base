@@ -1,0 +1,223 @@
+package com.zbiti.common.model.tree;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * 树节点实体类
+ * @author dlt
+ *
+ */
+public class TreeNode {
+	// 节点ID
+	private String id;
+
+	// 节点标题
+	private String title;
+
+	// 节点图标名
+	private String iconName;
+
+	// 节点链接
+	private String href;
+
+	// 节点父级节点ID
+	private String parentNoteId;
+
+	// 节点子节点List
+	private List<TreeNode> SonList;
+	
+	//带复选框的树，是否选中
+	private boolean checked = false;
+	
+	private String tvalue;
+	
+	private String tname;
+
+	public List<TreeNode> getSonList() {
+		return SonList;
+	}
+
+
+	public void setSonList(List<TreeNode> sonList) {
+		SonList = sonList;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getIconName() {
+		return iconName;
+	}
+
+	public void setIconName(String iconName) {
+		this.iconName = iconName;
+	}
+
+	public String getHref() {
+		return href;
+	}
+
+	public void setHref(String href) {
+		this.href = href;
+	}
+
+	public String getParentNoteId() {
+		return parentNoteId;
+	}
+
+	public void setParentNoteId(String parentNoteId) {
+		this.parentNoteId = parentNoteId;
+	}
+	
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+
+	
+
+	public String getTvalue() {
+		return tvalue;
+	}
+
+
+	public void setTvalue(String tvalue) {
+		this.tvalue = tvalue;
+	}
+
+
+	public String getTname() {
+		return tname;
+	}
+
+
+	public void setTname(String tname) {
+		this.tname = tname;
+	}
+
+
+	/**
+	 * 获取html代码
+	 * 
+	 * @return
+	 */
+	public String getLiStr() {
+		String li = "";
+		if (!"-1".equals(this.getId())) {
+			// 非最上层时
+			li += "<li id = 'tree_li_" + this.getId() + "'>";
+			
+			if (this.getHref() == null || "".equals(this.getHref())) {
+				li += "<a href='#'";
+			} else {
+				li += "<a href='" + this.getHref()
+				+ "' target='navTab' rel='panel_" + this.getId() + "'";
+			}
+			if(this.checked){
+				li +=" checked='true' ";
+			}
+			
+			if(this.getTname() != null && !"".equals(this.getTname())){
+				li += " tname='" + this.getTname() +"'";
+			}
+			
+			if(this.getTvalue() != null && !"".equals(this.getTvalue())){
+				li += " tvalue='" + this.getTvalue() +"' ";
+			}
+			
+			li += ">" + this.getTitle() + "</a>";
+			
+			if (this.getSonList() != null && this.getSonList().size() > 0) {
+				// 当存在子节点时创建ul
+				li += "<ul id = 'tree_ul_" + this.getId() + "'>";
+				for (TreeNode tn : this.getSonList()) {
+					// 递归获取每个子节点的html代码
+					li += tn.getLiStr();
+				}
+				li += "</ul>";
+			}
+			li += "</li>";
+		} else if ("-1".equals(this.getId())) {
+			// 最上层时
+			for (TreeNode tn : this.getSonList()) {
+				// 递归获取每个子节点的html代码
+				li += tn.getLiStr();
+			}
+		}
+
+		return li;
+	}
+
+	public TreeNode() {
+
+	}
+
+	/**
+	 * 结构化节点
+	 * 
+	 * @param tns
+	 *            无序的节点列表
+	 */
+	public TreeNode(List<TreeNode> tns) {
+		// 将列表转换成以ID为键的Map
+		Map<String, TreeNode> tnMaps = new HashMap<String, TreeNode>();
+		for (TreeNode n : tns) {
+			tnMaps.put(n.getId(), n);
+		}
+		// 用于记录存在父节点的节点，最后移除
+		List<String> removeNotes = new ArrayList<String>();
+
+		Set<String> tnKey = tnMaps.keySet();
+		Iterator<String> it = tnKey.iterator();
+		while (it.hasNext()) {
+			String id = it.next();
+			TreeNode tn = tnMaps.get(id);
+			String parentId = tn.getParentNoteId();
+			if (parentId != null && !"".equals(parentId)
+					&& tnMaps.get(parentId) != null) {
+				// 存在父节点
+				removeNotes.add(id);
+				if (tnMaps.get(parentId).getSonList() == null) {
+					tnMaps.get(parentId).setSonList(new ArrayList<TreeNode>());
+				}
+				// 将子节点加入父节点中
+				tnMaps.get(parentId).getSonList().add(tn);
+			}
+		}
+		// 删除有父节点的，保留无父节点的，即最上层
+		for (String s : removeNotes) {
+			tnMaps.remove(s);
+		}
+
+		Iterator<String> it2 = tnKey.iterator();
+		this.setId("-1");
+		this.setSonList(new ArrayList<TreeNode>());
+		while (it2.hasNext()) {
+			this.getSonList().add(tnMaps.get(it2.next()));
+		}
+	}
+
+}

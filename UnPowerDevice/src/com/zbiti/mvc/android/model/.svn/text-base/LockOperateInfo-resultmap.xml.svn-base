@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LockOperateInfoMap">
+	<resultMap type="com.zbiti.mvc.android.model.LockOperateInfo" id="LockOperateInfoResultMap">
+		<id property="operId" column="OPER_ID"/>
+		<result property="staffNbr" column="STAFF_NBR"/>
+		<result property="deviceNo" column="PHY_EQP_NO"/>
+		<result property="operDate" column="OPER_DATE"/>
+		<result property="photoName" column="PHOTO_NAME"/>
+		<result property="photoPath" column="PHOTO_PATH"/>
+		<result property="note" column="NOTE"/>
+		<result property="type" column="TYPE"/>
+		<result property="staffName" column="STAFF_NAME"/>
+		<result property="deviceName" column="DEVICE_NAME"/>
+	</resultMap>
+</mapper>

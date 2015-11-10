@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PortRfidInfoMap">
+	<resultMap type="com.zbiti.mvc.android.model.PortRfidInfo" id="PortRfidInfoResultMap">
+		<result property="device_id" column="device_id"/>
+		<result property="phy_port_id" column="phy_port_id"/>
+		<result property="phy_port_opr" column="phy_port_opr"/>
+		<result property="new_port_rf_id" column="new_port_rf_id"/>
+		<result property="old_port_rf_id" column="old_port_rf_id"/>
+		<result property="new_fiber_rf_id" column="new_fiber_rf_id"/>
+		<result property="old_fiber_rf_id" column="old_fiber_rf_id"/>
+		<result property="notes" column="notes"/>
+	</resultMap>
+</mapper>

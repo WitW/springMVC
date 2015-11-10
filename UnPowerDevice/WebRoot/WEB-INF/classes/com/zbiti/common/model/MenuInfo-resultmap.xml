@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MenuInfoMap">
+	<resultMap type="com.zbiti.common.model.Menu" id="menuInfoResultMap" >
+		<result property="menuId" column="MENU_ID" jdbcType="NUMERIC"/>
+		<result property="menuName" column="MENU_NAME" jdbcType="VARCHAR"/>
+		<result property="orderNo" column="ORDER_NO" jdbcType="VARCHAR"/>
+		<result property="menuLevel" column="MENU_LEVEL" jdbcType="VARCHAR"/>
+		<result property="href" column="HREF" jdbcType="VARCHAR"/>
+		<result property="isCheck" column="CHECK_RESULT" jdbcType="VARCHAR"/>
+		<result property="panelId" column="PANEL_ID" jdbcType="VARCHAR"/>
+		<result property="menuParentId" column="MENU_PARENT_ID" jdbcType="NUMERIC"/>
+	</resultMap>
+</mapper>

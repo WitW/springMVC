@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.zbiti.common.mapper.AuthorityMapper">
+	<!-- id和mapper接口中的方法名对应，resultType使用mybatis.xml中的别名 -->
+	
+	<!-- 分页查询角色信息 -->
+	<select id ="rolesInfolistPage" resultType="list" resultMap = "RoleInfoMap.RoleInfoResultMap">
+		SELECT r.role_id,r.role_name,r.role_value,r.SER_VALUE FROM unpower_device_role r  
+		
+		<trim prefix="WHERE">
+		  <if test="map.roleName != null and map.roleName != '' ">  
+       			r.ROLE_NAME like '%${map.roleName}%'
+    	  </if>
+		</trim>
+		ORDER BY r.ROLE_ID
+	</select>
+	
+	<!-- 查询所有系统功能信息 -->
+	<select id="getAllActionInfo" resultType="list" resultMap = "ActionInfoMap.ActionInfoResultMap">
+		SELECT AC.ACTION_ID,AC.ACTION_NAME,AC.ACTION_TYPE FROM UNPOWER_DEVICE_ACTION AC
+	</select>
+	
+	<!-- 修改角色信息 -->
+	<update id="updateRoleInfo">
+		update unpower_device_role r 
+		    
+			    <set>  
+					  <if test="roleName != null and roleName != '' ">  
+			       			r.ROLE_NAME=#{roleName},
+			    	  </if>
+			    	  <if test="serValue != null and serValue != '' ">  
+			       			r.SER_VALUE=#{serValue},
+			    	  </if>
+			    	  <if test="roleValue != null and roleValue != '' ">  
+			       			r.ROLE_VALUE=#{roleValue}
+			    	  </if>
+			    </set>  
+		    	where r.ROLE_ID=#{roleId}
+		   
+	</update>
+	
+	<!-- 查询所有的角色信息，不分页 -->
+	<select id="getAllRoleInfo" resultType="list" resultMap = "RoleInfoMap.RoleInfoResultMap">
+		SELECT r.role_id,r.role_name,r.role_value,r.SER_VALUE FROM unpower_device_role r  ORDER BY r.ROLE_ID
+	</select>
+	
+	<!-- 删除角色信息 -->
+	<delete id="deleteRoleInfo">
+		DELETE FROM unpower_device_role WHERE ROLE_ID=#{roleId}
+	</delete>
+	
+	<!-- 删除用户角色信息 -->
+	<delete id="deleteStaffRoleInfoByRoleId">
+		DELETE FROM unpower_device_staff_ROLE WHERE ROLE_ID=#{roleId}
+	</delete>
+	
+	<!-- 删除角色信息 -->
+	<insert id="insertRoleInfo"  parameterType="com.zbiti.common.model.RoleInfo">
+		INSERT INTO unpower_device_role VALUES(SEQ_UNPOWER_ROLE.NEXTVAL,#{roleName,jdbcType=VARCHAR},#{roleValue},#{serValue})
+	</insert>
+	
+	<!-- 根据角色ID查询角色信息 -->
+	<select id="getRoleInfoById" resultMap = "RoleInfoMap.RoleInfoResultMap">
+		SELECT r.role_id,r.role_name,r.role_value,r.SER_VALUE FROM unpower_device_role r  where r.role_id=#{roleId}
+	</select>
+	
+	<!-- 查询服务端功能信息 -->
+	<select id="getAllServerActionInfo" resultType="list" resultMap = "ActionInfoMap.ActionInfoResultMap">
+		SELECT AC.ACTION_ID,AC.ACTION_NAME,AC.ACTION_TYPE FROM UNPOWER_DEVICE_SERVER_ACTION AC
+	</select>
+	
+	<select id="getRoleInfoByRoleNameInfo" resultType = "map">
+		SELECT r.role_id,r.role_name,r.role_value,r.SER_VALUE FROM unpower_device_role r  where r.role_name=#{roleName}
+	</select>
+	
+</mapper>
+

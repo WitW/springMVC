@@ -1,0 +1,14 @@
+#Mon Sep 02 13:59:08 CST 2013
+eclipse.preferences.version=1
+encoding//WebRoot/content/index.jsp=UTF-8
+encoding//WebRoot/content/login.jsp=UTF-8
+encoding//WebRoot/content/table.jsp=UTF-8
+encoding//WebRoot/content/workOrderInput.jsp=UTF-8
+encoding//WebRoot/js/dwz/js/dwz.ajax.js=UTF-8
+encoding//WebRoot/js/dwz/js/dwz.alertMsg.js=UTF-8
+encoding//WebRoot/js/dwz/js/dwz.dialog.js=UTF-8
+encoding//WebRoot/js/dwz/js/dwz.regional.zh.js=UTF-8
+encoding//WebRoot/js/dwz/js/dwz.ui.js=UTF-8
+encoding//src/com/zbiti/mvc/android/action/LockOperateAction.java=UTF-8
+encoding//src/com/zbiti/mvc/login/controller/LoginController.java=UTF-8
+encoding/<project>=UTF-8

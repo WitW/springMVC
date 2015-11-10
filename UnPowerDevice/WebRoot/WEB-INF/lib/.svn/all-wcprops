@@ -1,0 +1,359 @@
+K 25
+svn:wc:ra_dav:version-url
+V 184
+/svn/YL/!svn/ver/5785/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib
+END
+org.springframework.aop-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 222
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.aop-3.1.0.RC1.jar
+END
+xfire-aegis-1.2.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 206
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-aegis-1.2.6.jar
+END
+org.springframework.asm-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 222
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.asm-3.1.0.RC1.jar
+END
+aopalliance.jar
+K 25
+svn:wc:ra_dav:version-url
+V 200
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/aopalliance.jar
+END
+wsdl4j-1.6.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 201
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/wsdl4j-1.6.2.jar
+END
+org.springframework.context-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 226
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.context-3.1.0.RC1.jar
+END
+xfire-annotations-1.2.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 212
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-annotations-1.2.6.jar
+END
+org.springframework.transaction-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 230
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.transaction-3.1.0.RC1.jar
+END
+stax-1.2.0.jar
+K 25
+svn:wc:ra_dav:version-url
+V 199
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/stax-1.2.0.jar
+END
+jstl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 193
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/jstl.jar
+END
+org.springframework.beans-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 224
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.beans-3.1.0.RC1.jar
+END
+XmlSchema-1.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 202
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/XmlSchema-1.1.jar
+END
+dom4j-1.6.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 200
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/dom4j-1.6.1.jar
+END
+org.springframework.core-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 223
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.core-3.1.0.RC1.jar
+END
+xfire-spring-1.2.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 207
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-spring-1.2.6.jar
+END
+jaxb-impl-2.0.3.jar
+K 25
+svn:wc:ra_dav:version-url
+V 204
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/jaxb-impl-2.0.3.jar
+END
+xfire-jsr181-api-1.0-M1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 212
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-jsr181-api-1.0-M1.jar
+END
+commons-pool.jar
+K 25
+svn:wc:ra_dav:version-url
+V 201
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/commons-pool.jar
+END
+xfire-java5-1.2.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 206
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-java5-1.2.6.jar
+END
+org.springframework.expression-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 229
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.expression-3.1.0.RC1.jar
+END
+ojdbc14.jar
+K 25
+svn:wc:ra_dav:version-url
+V 196
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/ojdbc14.jar
+END
+xfire-xmlbeans-1.2.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 209
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-xmlbeans-1.2.6.jar
+END
+commons-collections.jar
+K 25
+svn:wc:ra_dav:version-url
+V 208
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/commons-collections.jar
+END
+org.springframework.jdbc-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 223
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.jdbc-3.1.0.RC1.jar
+END
+jdom.jar
+K 25
+svn:wc:ra_dav:version-url
+V 193
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/jdom.jar
+END
+jaxb-api-2.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 201
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/jaxb-api-2.1.jar
+END
+jackson-databind-2.1.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 211
+/svn/YL/!svn/ver/5785/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/jackson-databind-2.1.1.jar
+END
+commons-fileupload-1.2.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 213
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/commons-fileupload-1.2.1.jar
+END
+commons-logging-1.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 208
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/commons-logging-1.1.jar
+END
+junit-4.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 198
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/junit-4.6.jar
+END
+standard.jar
+K 25
+svn:wc:ra_dav:version-url
+V 197
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/standard.jar
+END
+log4j-1.2.15.jar
+K 25
+svn:wc:ra_dav:version-url
+V 201
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/log4j-1.2.15.jar
+END
+mybatis-spring-1.2.0.jar
+K 25
+svn:wc:ra_dav:version-url
+V 209
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/mybatis-spring-1.2.0.jar
+END
+org.springframework.test-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 223
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.test-3.1.0.RC1.jar
+END
+xfire-core-1.2.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 205
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-core-1.2.6.jar
+END
+mybatis-3.2.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 202
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/mybatis-3.2.2.jar
+END
+xfire-jaxws-1.2.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 206
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-jaxws-1.2.6.jar
+END
+json-lib-2.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 201
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/json-lib-2.1.jar
+END
+jackson-core-2.1.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 207
+/svn/YL/!svn/ver/5785/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/jackson-core-2.1.1.jar
+END
+xfire-ws-security-1.2.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 212
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-ws-security-1.2.6.jar
+END
+jaxen-1.1-beta-7.jar
+K 25
+svn:wc:ra_dav:version-url
+V 205
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/jaxen-1.1-beta-7.jar
+END
+commons-io-1.3.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 205
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/commons-io-1.3.2.jar
+END
+jackson-annotations-2.1.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 214
+/svn/YL/!svn/ver/5785/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/jackson-annotations-2.1.1.jar
+END
+wstx-asl-3.2.0.jar
+K 25
+svn:wc:ra_dav:version-url
+V 203
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/wstx-asl-3.2.0.jar
+END
+commons-dbcp.jar
+K 25
+svn:wc:ra_dav:version-url
+V 201
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/commons-dbcp.jar
+END
+jackson-all-1.9.11.jar
+K 25
+svn:wc:ra_dav:version-url
+V 207
+/svn/YL/!svn/ver/5785/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/jackson-all-1.9.11.jar
+END
+org.springframework.orm-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 222
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.orm-3.1.0.RC1.jar
+END
+xfire-jaxb2-1.2.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 206
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-jaxb2-1.2.6.jar
+END
+commons-httpclient-3.0.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 213
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/commons-httpclient-3.0.1.jar
+END
+ezmorph-1.0.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 202
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/ezmorph-1.0.6.jar
+END
+commons-codec-1.3.jar
+K 25
+svn:wc:ra_dav:version-url
+V 206
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/commons-codec-1.3.jar
+END
+org.springframework.context.support-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 234
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.context.support-3.1.0.RC1.jar
+END
+org.springframework.web.servlet-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 230
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.web.servlet-3.1.0.RC1.jar
+END
+org.springframework.oxm-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 222
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.oxm-3.1.0.RC1.jar
+END
+commons-lang-2.3.jar
+K 25
+svn:wc:ra_dav:version-url
+V 205
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/commons-lang-2.3.jar
+END
+xfire-jaxb-1.1.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 205
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-jaxb-1.1.2.jar
+END
+commons-beanutils-1.7.0.jar
+K 25
+svn:wc:ra_dav:version-url
+V 212
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/commons-beanutils-1.7.0.jar
+END
+org.springframework.web-3.1.0.RC1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 222
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/org.springframework.web-3.1.0.RC1.jar
+END
+xfire-generator-1.2.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 210
+/svn/YL/!svn/ver/5693/code/%E9%80%9A%E9%BC%8E%E9%A1%B9%E7%9B%AE/%E6%99%BA%E8%83%BDODN_%E7%94%B5%E4%BF%A1/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81/UnPowerDevice/WebRoot/WEB-INF/lib/xfire-generator-1.2.6.jar
+END

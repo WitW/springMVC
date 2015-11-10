@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OperateTimeMap">
+	<resultMap type="com.zbiti.mvc.android.model.OperateTime" id="OperateTimeResultMap">
+		<id property="opTimeId" column="OP_TIME_ID"/>
+		<id property="name" column="NAME"/>
+		<result property="monStartTime" column="MON_START_TIME"/>
+		<result property="monEndTime" column="MON_END_TIME"/>
+		<result property="tuesStartTime" column="TUES_START_TIME"/>
+		<result property="tuesEndTime" column="TUES_END_TIME"/>
+		<result property="wedStartTime" column="WED_START_TIME"/>
+		<result property="wedEndTime" column="WED_END_TIME"/>
+		<result property="thurStartTime" column="THUR_START_TIME"/>
+		<result property="thurEndTime" column="THUR_END_TIME"/>
+		<result property="friStartTime" column="FRI_START_TIME"/>
+		<result property="friEndTime" column="FRI_END_TIME"/>
+		<result property="satStartTime" column="SAT_START_TIME"/>
+		<result property="satEndTime" column="SAT_END_TIME"/>
+		<result property="sunStartTime" column="SUN_START_TIME"/>
+		<result property="sunEndTime" column="SUN_END_TIME"/>
+	</resultMap>
+</mapper>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.zbiti.mvc.android.mapper.UserInfoMapper">
+	<!-- id和mapper接口中的方法名对应，resultType使用mybatis.xml中的别名 -->
+	<select id="getUserInfoByStaffId" resultType="map" >
+		select staff_id,staff_Nbr,password,staff_name,org,area,DOOR_LEVEL, a.area_id,SUBSTR(a.code,0,instr(a.code,'.')-1) as areacode 
+		
+		from ${odnmain}.unpower_device_staff f
+
+		join  ${odnmain}.spc_area ar  on ar.area_id=f.area join ${odnmain}.spc_area a on ar.parent_area_id=a.area_id 
+		
+		where f.staff_Nbr = #{staffNbr}
+	</select>
+	
+	<update id="updatePassword">
+		update ${odnmain}.unpower_device_staff s set s.password = #{newPassWord} where s.staff_nbr = #{staffId} and s.password = #{passWord}
+	</update>
+	
+	<insert id = "saveAdvice" >
+		insert into unpower_device_ADVICE values(
+		(select staffId from ${odnmain}.unpower_device_staff s where s.staff_nbr = #{staffId}),
+		#{content}
+		)
+	</insert>
+	
+	<!--分页查询用户信息  -->
+	<select id="staffInfolistPage"  parameterType="map" resultType="com.zbiti.mvc.android.model.StaffInfo" resultMap="StaffInfoMap.StaffInfoResultMap">
+		SELECT ST.STAFF_ID,ST.STAFF_NBR,ST.PASSWORD,ST.STAFF_NAME,ST.ORG, AR.NAME 
+		FROM ${odnmain}.unpower_device_staff st JOIN ${odnmain}.spc_area AR ON AR.AREA_ID=ST.AREA
+		
+		join ${odnmain}.spc_area a on  ar.parent_area_id = a.area_id and a.area_id=#{map.areaId,jdbcType=NUMERIC}
+		
+		<trim prefix="WHERE" prefixOverrides="AND |OR "> 
+	       
+	            <if test="map.staffNbr != null and map.staffNbr != '' ">  
+	                AND ST.STAFF_NBR like '%${map.staffNbr}%'
+	            </if>  
+	            <if test="map.password != null and map.password != '' ">  
+	                AND ST.PASSWORD like '%${map.password}%'  
+	            </if> 
+	            <if test="map.staffName != null and map.staffName != '' "> 
+	                AND ST.STAFF_NAME like '%${map.staffName}%'
+	            </if>
+	            <if test="map.org != null and map.org != '' ">
+	                AND ST.ORG like '%${map.org}%'  
+	            </if>
+	            <if test="map.areaName != null and map.areaName != '' ">  
+	                AND ST.AREA = #{map.areaName,jdbcType=VARCHAR}  
+	            </if> 
+    	</trim>
+    	 order by  ST.STAFF_ID
+	</select>
+	
+	<!-- 查询用户的角色信息 -->
+	<select id="getStaffRoleInfo" resultType="String">
+		SELECT SR.ROLE_ID FROM unpower_device_staff_ROLE SR JOIN ${odnmain}.unpower_device_staff SF ON SR.STAFF_ID=SF.STAFF_ID WHERE SF.STAFF_ID=#{staffId}
+	</select>
+	
+	<!-- 删除用户的角色信息 -->
+	<delete id="deleteStaffRoleInfo">
+		DELETE FROM unpower_device_staff_ROLE SR WHERE  SR.STAFF_ID=#{staffId}
+	</delete>
+	
+	<!-- 新增用户的角色信息 -->
+	<insert id="insertStaffRoleInfo">
+		INSERT INTO unpower_device_staff_ROLE VALUES(#{staffId},#{roleId})
+	</insert>
+	
+	<!-- 删除用户信息 -->
+	<delete id="deleteStaffInfoById">
+		DELETE FROM ${odnmain}.unpower_device_staff SR WHERE  SR.STAFF_ID=#{staffId}
+	</delete>
+	
+	<!-- 新增用户信息-->
+	<insert id="insertStaffInfo">
+		insert into ${odnmain}.unpower_device_staff(STAFF_ID,STAFF_NBR,PASSWORD,STAFF_NAME,ORG,AREA) 
+		values(SEQ_UNPOWER_STAFF.NEXTVAL,#{staffNbr},#{password},#{staffName},#{org},#{areaName})
+	</insert>
+	
+	<!-- 修改用户信息 -->
+	<update id="updateStaffInfo">
+		update ${odnmain}.unpower_device_staff s set s.staff_nbr=#{staffNbr},s.password=${password}, 
+		s.staff_name=#{staffName},s.org=#{org},s.area=#{areaName}
+		where s.staff_id=#{staffId}
+	</update>
+	
+	<!-- 根据用户名查询，区域信息 -->
+	<select id="getAreaInfoByStaffNbr"  resultType="map">
+		select ar.area_id,ar.name from ${odnmain}.spc_area ar 
+			where ar.parent_area_id=(select ar.parent_area_id 
+				from  ${odnmain}.spc_area ar join  ${odnmain}.unpower_device_staff st on st.area=ar.area_id 
+				
+			<trim prefix="WHERE" prefixOverrides="AND |OR ">  
+	        <choose>
+	            <when test="staffNbr != null and staffNbr != '' ">  
+	                AND st.staff_nbr=#{staffNbr}
+	            </when>
+	            <otherwise>
+	                AND st.staff_id=#{staffId}
+	            </otherwise>  
+	        </choose>  
+    	</trim> 
+				
+			)
+	</select>
+	
+	<!-- 根据用户Id查询，用户信息 -->
+	<select id="getStaffInfoByStaffId"  resultMap="StaffInfoMap.StaffInfoResultMap">
+				SELECT ST.STAFF_ID,ST.STAFF_NBR,ST.PASSWORD,ST.STAFF_NAME,ST.ORG, AR.NAME 
+		FROM ${odnmain}.unpower_device_staff st JOIN ${odnmain}.spc_area AR ON AR.AREA_ID=ST.AREA
+		WHERE ST.STAFF_ID=#{staffId}
+	</select>
+	
+	<select id="getStaffRoleValueByStaffNbr" resultType="Integer">
+		select distinct(r.role_value) from ${odnmain}.unpower_device_staff s 
+		join unpower_device_staff_role sr
+		     on s.staff_id=sr.staff_id
+		join unpower_device_role r
+		     on sr.role_id=r.role_id
+		where s.staff_nbr=#{staffNbr}
+	</select>
+	
+	<select id="getRoleSerValueByStaffNbr" resultType="Integer">
+		select distinct(r.ser_value) from ${odnmain}.unpower_device_staff s 
+		join unpower_device_staff_role sr
+		     on s.staff_id=sr.staff_id
+		join unpower_device_role r
+		     on sr.role_id=r.role_id
+		where s.staff_nbr=#{staffNbr}
+	</select>
+	
+	<!-- 与当前用户同一父区域的用户 -->
+	<select id="getStaffInfoInOneArea" resultMap="StaffInfoMap.StaffInfoResultMap">
+		SELECT ST.STAFF_ID, ST.STAFF_NBR, ST.PASSWORD, ST.STAFF_NAME, ST.ORG
+		  FROM  ${odnmain}.UNPOWER_DEVICE_STAFF ST JOIN SPC_AREA A ON A.AREA_ID=ST.AREA
+		 WHERE A.PARENT_AREA_ID = (SELECT TA.PARENT_AREA_ID
+		                    FROM  ${odnmain}.UNPOWER_DEVICE_STAFF TMP JOIN SPC_AREA TA ON TA.AREA_ID=TMP.AREA
+		                   WHERE TMP.STAFF_NBR =#{staffNbr})           
+		 ORDER BY ST.STAFF_ID 
+	</select>
+	
+	<!-- 用户权限级别加1 -->
+	<update id="updateStaffDoorLevel">
+		 update ${odnmain}.unpower_device_staff ds set ds.door_level=ds.door_level+1 where ds.staff_id=#{staffId}
+	</update>
+	
+	<select id="getAreaCodeById" resultType="String">
+		select SUBSTR(a.code,0,instr(a.code,'.')-1) as areacode 
+		from ${odnmain}.spc_area a join ${odnmain}.spc_area ar on ar.parent_area_id=a.area_id 
+		where ar.area_id=#{areaId}
+	</select>
+</mapper>

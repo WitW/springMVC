@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VersionObjectMap">
+	<resultMap type="com.zbiti.mvc.android.model.VersionObject" id="VersionObjectResultMap">
+		<id property="software_version_id" column="SOFTWARE_VERSION_ID"/>
+		<id property="version_num" column="VERSION_NUM"/>
+		<result property="version_info" column="VERSION_INFO"/>
+		<result property="state" column="STATE"/>
+		<result property="create_date" column="CREATE_DATE"/>
+		<result property="file_path" column="FILE_PATH"/>
+		<result property="file_name" column="FILE_NAME"/>
+		<result property="describe" column="DESCRIBE"/>
+		<result property="if_force_update" column="IF_FORCE_UPDATE"/>
+		<result property="screen_resolution" column="SCREEN_RESOLUTION"/>
+		<result property="version_code" column="VERSION_CODE"/>
+		<result property="download_num" column="DOWNLOAD_NUM"/>
+	</resultMap>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DevicePortInfoMap">
+	<resultMap type="com.zbiti.mvc.android.model.DevicePortInfo" id="DevicePortInfoResultMap">
+		<id property="glNo" column="gl_no"/>
+		<id property="portId" column="phy_port_id"/>
+		<result property="deviceId" column="phy_eqp_id"/>
+		<result property="deviceType" column="phy_res_spec"/>
+		<result property="portNo" column="phy_port_no"/>
+		<result property="deviceNo" column="phy_eqp_no"/>
+		<result property="portRfid" column="phy_port_rfid"/>
+		<result property="jointRfid" column="phy_joint_rfid"/>
+		<result property="shelfLocation" column="phy_shelf_location"/>
+		<result property="frameLocation" column="phy_frame_location"/>
+		<result property="slotLocation" column="phy_slot_location"/>
+		<result property="portLocation" column="phy_port_location"/>
+		<result property="deviceName" column="phy_eqp_name"/>
+	</resultMap>
+</mapper>

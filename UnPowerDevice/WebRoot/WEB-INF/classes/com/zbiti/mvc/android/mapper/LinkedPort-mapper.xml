@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.zbiti.mvc.android.mapper.LinkedPortMapper">
+	<!-- id和mapper接口中的方法名对应，resultType使用mybatis.xml中的别名 -->
+	<select id="getLinePortInfo" resultType="map">
+	SELECT P1.A_LINE_PORT,P1.Z_LINE_PORT  FROM LINE_PORT P1 WHERE P1.A_LINE_PORT=#{aPort,jdbcType=VARCHAR} OR P1.Z_LINE_PORT=#{aPort,jdbcType=VARCHAR}
+	UNION 
+	SELECT P2.A_LINE_PORT,P2.Z_LINE_PORT  FROM LINE_PORT P2 WHERE P2.A_LINE_PORT=#{zPort,jdbcType=VARCHAR} OR P2.Z_LINE_PORT=#{zPort,jdbcType=VARCHAR}
+	</select>
+	
+	<update id="updateLinePort">
+		UPDATE LINE_PORT P SET P.A_LINE_PORT=#{aPort},P.Z_LINE_PORT=#{zPort}
+		
+	  <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      	 <if test="aPort != null and aPort != '' ">  
+	                OR P.A_LINE_PORT=#{aPort} OR P.Z_LINE_PORT=#{aPort}
+	     </if>
+	     <if test="zPort != null and zPort != '' ">
+	                OR P.Z_LINE_PORT=#{zPort} OR  P.A_LINE_PORT=#{zPort}
+	     </if>  
+      </trim>
+	</update>
+
+	<insert id="insertLinePort">
+		INSERT INTO LINE_PORT(A_LINE_PORT,Z_LINE_PORT) VALUES(#{aPort},#{zPort})
+	</insert>
+</mapper>

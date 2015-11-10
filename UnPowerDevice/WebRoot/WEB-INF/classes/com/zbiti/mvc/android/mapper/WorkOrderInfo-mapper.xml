@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.zbiti.mvc.android.mapper.WorkOrderMapper">
+	<!-- id和mapper接口中的方法名对应，resultType使用mybatis.xml中的别名 -->
+	<select id="getWorkOrderListByStaffID" resultType="WorkOrderInfo" resultMap="WorkOrderInfoMap.WorkOrderInfoResultMap">
+		select d.*,s.staff_nbr from zd_work_order_interface d 
+		join ${odnmain}.unpower_device_staff s on s.staff_Id = d.staff_Id
+		where s.staff_nbr = #{staffId} and d.order_state = 'W'
+	</select>
+	
+	<update id="updateWorkOrderList">
+	update zd_work_order_interface c set work_order_Id = '123' where c.work_order_Id = #{orderId}
+	</update>
+	
+	<update id ="updateWorkOrder">
+		update zd_work_order_interface c set order_state = 'C' where c.work_order_Id = #{orderId}
+	</update>
+	
+	<insert id="saveWorkOrder" parameterType="WorkOrderInfo">
+		insert into zd_work_order_interface Z
+  (work_order_id,
+   staff_id,
+   busy_type,
+   event,
+   dredge_level,
+   complete_date,
+   tml_id,
+   customer,
+   access_num,
+   address,
+   telephone,
+   old_res,
+   new_res,
+   order_state,
+   create_date,
+   pon_type,
+   new_gl_no,
+   old_gl_no,
+   dev_port_no)
+   VALUES (
+			#{workOrderId,jdbcType=VARCHAR},(select staff_Id from ${odnmain}.unpower_device_staff s where s.staff_nbr = #{staffNbr,jdbcType=VARCHAR}),#{busyType,jdbcType=VARCHAR},#{event,jdbcType=VARCHAR},#{dredgeLevel,jdbcType=VARCHAR},to_date(#{completeTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi'),(select tml_id from spc_tml st where st.name = #{tml,jdbcType=VARCHAR}),
+			#{customer,jdbcType=VARCHAR},#{accessNum,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR},#{oldRes,jdbcType=VARCHAR},#{newRes,jdbcType=VARCHAR},'W',sysdate,#{ponType,jdbcType=VARCHAR},#{newGlNo,jdbcType=VARCHAR},#{oldGlNo,jdbcType=VARCHAR},#{devPortNo,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="getWorkOrderId" resultType="WorkOrderInfo" resultMap="WorkOrderInfoMap.WorkOrderInfoResultMap">
+	
+		select d.dev_port_no from zd_work_order_interface d where d.work_order_id=#{orderId}
+		
+	</select>
+	
+	<select id="getWorkOrderInfolistPage" resultType="WorkOrderInfo" resultMap="WorkOrderInfoMap.WorkOrderInfoResultMap">
+	   SELECT S.STAFF_NBR,
+	   ZD.WORK_ORDER_ID,
+       ZD.BUSY_TYPE,
+       ZD.EVENT,
+       ZD.DREDGE_LEVEL,
+       ZD.CUSTOMER,
+       ZD.ADDRESS,
+       ZD.ORDER_STATE,
+       ZD.PON_TYPE,
+       ZD.ACCESS_NUM,
+       ZD.TELEPHONE
+	  FROM ZD_WORK_ORDER_INTERFACE ZD
+	  LEFT JOIN UNPOWER_DEVICE_STAFF S
+	    ON S.STAFF_ID = ZD.STAFF_ID
+	  
+	  <trim prefix="WHERE" prefixOverrides="AND | OR">
+	  	<if test="map.orderState != null and map.orderState != ''">
+	  		AND ZD.ORDER_STATE = #{map.orderState}
+	  	</if>
+	  	<if test="map.staffNbr != null and map.staffNbr != ''">
+	  		AND S.STAFF_NBR like '%${map.staffNbr}%'
+	  	</if>
+	  </trim>
+	</select>
+</mapper>

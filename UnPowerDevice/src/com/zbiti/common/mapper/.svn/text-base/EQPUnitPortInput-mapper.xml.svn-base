@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.zbiti.common.mapper.EQPUnitPortInputMapper">
+	<!-- id和mapper接口中的方法名对应，resultType使用mybatis.xml中的别名 --> 
+	
+	<insert id="insertEquipmentInfo">
+		INSERT INTO  PHY_EQUIPMENT
+			  (PHY_EQP_ID,NAME,NO,RES_SPEC_ID,AREA_ID,TML_ID,ADDRESS,INSTALL_UNIT_ID,IS_USER_ID,LONG_OR_LOCAL_ID,OPR_STATE_ID,PROP_TYPE_ID,MNT_STYLE_ID,MNT_STATE_ID)
+        VALUES(#{PHY_EQP_ID,jdbcType=NUMERIC},#{NAME},#{NO},#{RES_SPEC_ID,jdbcType=NUMERIC},#{AREA_ID,jdbcType=NUMERIC},#{TML_ID,jdbcType=NUMERIC},#{ADDRESS},#{INSTALL_UNIT_ID,jdbcType=NUMERIC},80000039,#{LONG_OR_LOCAL_ID,jdbcType=NUMERIC},170375,40001,#{MNT_STYLE_ID,jdbcType=NUMERIC},170351)
+	</insert>
+	
+	
+	<insert id="insertUnitInfo">
+		INSERT INTO PHY_EQP_UNIT
+	        (UNIT_ID,NAME,NO,AREA_ID,PHY_EQP_ID,PARENT_UNIT_ID,RES_SPEC_ID,OPR_STATE_ID,SEQUENCE,ROW_NO,COLUMN_NO,COLUMNS,NUM_ROWS)
+	 	VALUES (#{UNIT_ID,jdbcType=NUMERIC},#{NAME},#{NO},#{AREA_ID,jdbcType=NUMERIC},#{PHY_EQP_ID,jdbcType=NUMERIC},#{PARENT_UNIT_ID,jdbcType=NUMERIC},#{RES_SPEC_ID,jdbcType=NUMERIC},170003,#{SEQUENCE,jdbcType=NUMERIC},#{ROW_NO,jdbcType=NUMERIC},#{COLUMN_NO,jdbcType=NUMERIC},#{COLUMNS,jdbcType=NUMERIC},#{NUM_ROWS,jdbcType=NUMERIC})		
+	</insert>
+	
+	<insert id="insertPortInfo">
+		INSERT INTO PHY_TERM_PORT
+			(PHY_PORT_ID,NO,RES_SPEC_ID,PHY_EQP_ID,UNIT_ID,UP_OR_DOWN_ID,OPR_STATE_ID,MNT_STATE_ID,SEQ_IN_UNIT,SEQ_IN_EQP,ROW_NO,COLUMN_NO,CREATE_DATE,PARTITION_ID,IS_FAULT,IS_LOCKED)
+		values(#{PHY_PORT_ID,jdbcType=NUMERIC},#{NO},#{RES_SPEC_ID,jdbcType=NUMERIC},#{PHY_EQP_ID,jdbcType=NUMERIC},#{UNIT_ID,jdbcType=NUMERIC},#{UP_OR_DOWN_ID,jdbcType=NUMERIC},170003,170351,#{SEQ_IN_UNIT,jdbcType=NUMERIC},#{SEQ_IN_EQP,jdbcType=NUMERIC},#{ROW_NO,jdbcType=NUMERIC},#{COLUMN_NO,jdbcType=NUMERIC},sysdate,20,0,0)
+	</insert>
+	
+	
+	<select id="getMaxEqpId" resultType="String">
+		SELECT MAX(PE.PHY_EQP_ID) FROM PHY_EQUIPMENT PE
+	</select>
+	
+	<select id="getMaxUnitId" resultType="String">
+		SELECT MAX(U.UNIT_ID) FROM PHY_EQP_UNIT U
+	</select>
+	
+	<select id="getMaxPortId" resultType="String">
+		SELECT MAX(P.PHY_PORT_ID) FROM PHY_TERM_PORT P
+	</select>
+	
+	<select id="getUnitIdByNo" resultType="map">
+		SELECT U.UNIT_ID,U.PARENT_UNIT_ID FROM PHY_EQP_UNIT U JOIN PHY_EQUIPMENT PE
+
+		ON PE.PHY_EQP_ID=U.PHY_EQP_ID
+		
+		WHERE U.RES_SPEC_ID=306 AND PE.NO=#{eqpNo,jdbcType=VARCHAR} AND U.NO=#{unitNo,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getFrameInfo" resultType="map">
+		SELECT U.NO FROM PHY_EQP_UNIT U
+
+		JOIN PHY_EQUIPMENT PE ON PE.PHY_EQP_ID=U.PHY_EQP_ID  WHERE U.RES_SPEC_ID=306 AND PE.NO=#{eqpNo,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getPrefectureArea" resultType="map">
+		SELECT A.AREA_ID,A.NAME FROM ${odnmain}.SPC_AREA A WHERE A.PARENT_AREA_ID=2
+	</select>
+	
+	<select id="getAreaByParentId" resultType="map">
+		SELECT A.AREA_ID,A.NAME FROM ${odnmain}.SPC_AREA A WHERE A.PARENT_AREA_ID=#{parentAreaId,jdbcType=NUMERIC}
+	</select>
+</mapper>
+

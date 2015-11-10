@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.zbiti.mvc.android.mapper.VersionMapper">
+	<!-- id和mapper接口中的方法名对应，resultType使用mybatis.xml中的别名 -->
+	
+	<select id="getLastVersion" resultType="com.zbiti.mvc.android.model.VersionObject" resultMap="VersionObjectMap.VersionObjectResultMap">
+		select SOFTWARE_VERSION_ID, VERSION_NUM,VERSION_INFO,STATE,CREATE_DATE,FILE_PATH,FILE_NAME,DESCRIBE,IF_FORCE_UPDATE,SCREEN_RESOLUTION,VERSION_CODE,DOWNLOAD_NUM  
+		from INST_VERSION t where VERSION_CODE=(select max(VERSION_CODE) from INST_VERSION)
+	</select>
+	
+	<select id="getMaxVersionCode" resultType="java.lang.String">
+		select max(VERSION_CODE) from INST_VERSION
+	</select>
+	
+	<select id="getListVersion" resultType="com.zbiti.mvc.android.model.VersionObject" resultMap="VersionObjectMap.VersionObjectResultMap">
+		select SOFTWARE_VERSION_ID, VERSION_NUM,VERSION_INFO,STATE,CREATE_DATE,FILE_PATH,FILE_NAME,DESCRIBE,IF_FORCE_UPDATE,SCREEN_RESOLUTION,VERSION_CODE,DOWNLOAD_NUM 
+		from  INST_VERSION where VERSION_CODE &gt;#{versionId} order by version_code desc 
+	</select>
+	
+	<update id="updateVersionDownloadNum">
+		update INST_VERSION set DOWNLOAD_NUM=(DOWNLOAD_NUM+1) where SOFTWARE_VERSION_ID=#{soft_version_id}
+	</update>
+	
+	<insert id="saveVersionInfo">
+		insert into INST_VERSION (SOFTWARE_VERSION_ID, VERSION_NUM,VERSION_INFO,STATE,CREATE_DATE,FILE_PATH,FILE_NAME,DESCRIBE,IF_FORCE_UPDATE,SCREEN_RESOLUTION,VERSION_CODE)
+		values (#{software_version_id,jdbcType=VARCHAR},#{version_num,jdbcType=VARCHAR},#{version_info,jdbcType=VARCHAR},
+			#{state,jdbcType=CHAR,},sysdate,#{file_path,jdbcType=VARCHAR},#{file_name,jdbcType=VARCHAR},#{describe,jdbcType=VARCHAR},
+			#{if_force_update,jdbcType=CHAR},#{screen_resolution,jdbcType=VARCHAR},#{version_code,jdbcType=NUMERIC})
+	
+	</insert>
+</mapper>

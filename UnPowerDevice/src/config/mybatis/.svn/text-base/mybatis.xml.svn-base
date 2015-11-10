@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties>
+	  <!-- 数据库公共表 所在 的 用户名 -->
+	  <property name="odnmain" value="odntest"/>
+	  <!--property name="odnmain" value="unpower_device"/ -->
+	  
+	</properties>
+	<!-- 别名 -->
+	<typeAliases>
+		<!-- typeAlias type="com.zbiti.mvc.phyEqp.model.PhyEqpInfo" alias="PhyEqpInfo"/ -->
+		<typeAlias type="com.zbiti.mvc.android.model.WorkOrderInfo" alias="WorkOrderInfo"/>
+		<typeAlias type="com.zbiti.mvc.android.model.DevicePortInfo" alias="DevicePortInfo"/>
+		<typeAlias type="com.zbiti.mvc.android.model.PortRfidInfo" alias="PortRfidInfo"/>
+	</typeAliases>
+	
+	<plugins>  
+	    <plugin interceptor="com.zbiti.util.PagePlugin">  
+	        <property name="dialect" value="oracle"/>  
+	        <property name="pageSqlId" value=".*listPage"/>  
+	    </plugin>  
+	</plugins> 
+
+</configuration>

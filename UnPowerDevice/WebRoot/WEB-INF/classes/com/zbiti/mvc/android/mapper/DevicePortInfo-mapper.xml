@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.zbiti.mvc.android.mapper.DevicePortMapper">
+	<!-- id和mapper接口中的方法名对应，resultType使用mybatis.xml中的别名 -->
+	<select id="getPortInfoByDeviceNoAndPortNo" resultType="DevicePortInfo" resultMap="DevicePortInfoMap.DevicePortInfoResultMap">
+		select distinct pe.no phy_eqp_no,
+       pe.phy_eqp_id,
+       prs.name phy_res_spec,
+       p.no phy_port_no,
+       p.unit_id,
+       p.phy_port_id,
+       f.value phy_port_rfid,
+       f2.value phy_joint_rfid,
+       '第'||p.row_no||'行第'||p.column_no||'个' phy_port_location,
+       (select '模块'||u.no from phy_eqp_unit u where u.unit_id = p.unit_id) phy_slot_location,
+       (select u2.no 
+          from phy_eqp_unit u
+          join phy_eqp_unit u2
+            on u2.unit_id = u.parent_unit_id
+         where u.unit_id = p.unit_id) phy_frame_location,
+       (select u3.no
+          from phy_eqp_unit u
+          join phy_eqp_unit u2
+            on u2.unit_id = u.parent_unit_id
+          join phy_eqp_unit u3
+            on u3.unit_id = u2.parent_unit_id
+         where u.unit_id = p.unit_id) phy_shelf_location
+  from phy_term_port p
+  left outer join phy_obj_rfid f
+    on f.obj_id = p.phy_port_id
+   and f.prop_spec_id = '80002001'
+  left outer join phy_obj_rfid f2
+    on f2.obj_id = p.phy_port_id
+   and f2.prop_spec_id = '80002002'
+  join phy_equipment pe
+    on pe.phy_eqp_id = p.phy_eqp_id
+  left outer join lnk_phy_link_component c on (c.a_phy_port_id = p.phy_port_id or c.z_phy_port_id = p.phy_port_id) and c.build_type_id = 80000406
+  
+ AND (c.a_phy_eqp_id = pe.phy_eqp_id or c.z_phy_eqp_id = pe.phy_eqp_id)
+ 
+  join pub_resource_spec prs
+    on prs.res_spec_id = pe.res_spec_id
+ where pe.no =#{deviceNo} and p.no = #{portNo}
+   and pe.res_spec_id in(413,414,703,704,744,803,804,1165,1191,2530,411)
+	</select>
+	
+	
+	<select id="getPortLocationByPortId" resultType="DevicePortInfo" resultMap="DevicePortInfoMap.DevicePortInfoResultMap">
+		select column_no phy_port_location,
+		      (select u.row_no from phy_eqp_unit u where u.unit_id = p.unit_id) phy_slot_location,
+		      (select u2.column_no from phy_eqp_unit u 
+		       join phy_eqp_unit u2 on u2.unit_id = u.parent_unit_id where u.unit_id = p.unit_id) phy_frame_location,
+		      (select u2.column_no from phy_eqp_unit u 
+		       join phy_eqp_unit u2 on u2.unit_id = u.parent_unit_id
+		       join phy_eqp_unit u3 on u3.unit_id = u2.parent_unit_id where u.unit_id = p.unit_id) phy_shelf_location
+		  from phy_term_port p
+		 where p.phy_port_id = #{portId}
+	</select>
+	
+	<!-- Todo -->
+	<select id="getPortRfIdByPortId" resultType="DevicePortInfo" resultMap="DevicePortInfoMap.DevicePortInfoResultMap">
+		select 1 phy_port_rfid from dual
+	</select>
+	
+	<update id="saveFiberRfId" parameterType="PortRfidInfo">
+		MERGE INTO phy_obj_rfid p
+			USING (select #{phy_port_id} phy_port_id from dual) np
+			ON (p.obj_id = np.phy_port_id AND p.prop_spec_id = '80002002') 
+			WHEN MATCHED THEN
+			  UPDATE
+			     SET p.value = #{new_fiber_rf_id,jdbcType=VARCHAR}
+			   WHERE p.obj_id = #{phy_port_id,jdbcType=NUMERIC} AND p.prop_spec_id = '80002002' 
+			WHEN NOT MATCHED THEN
+			  INSERT
+			  VALUES
+			    (#{phy_port_id,jdbcType=NUMERIC},'80002002','170351',#{new_fiber_rf_id,jdbcType=VARCHAR},(select staff_Id from ${odnmain}.unpower_device_staff s where s.staff_nbr = #{staffId,jdbcType=VARCHAR}),sysdate,'','','',(select parent_area_id from ${odnmain}.spc_area where area_id = #{area,jdbcType=NUMERIC}))
+	</update>
+	
+	<update id="savePortRfId" parameterType="PortRfidInfo">
+		MERGE INTO phy_obj_rfid p
+			USING (select #{phy_port_id} phy_port_id from dual) np
+			ON (p.obj_id = np.phy_port_id AND p.prop_spec_id = '80002001') 
+			WHEN MATCHED THEN
+			  UPDATE
+			     SET p.value = #{new_port_rf_id,jdbcType=VARCHAR}
+			   WHERE p.obj_id = #{phy_port_id,jdbcType=NUMERIC} AND p.prop_spec_id = '80002001' 
+			WHEN NOT MATCHED THEN
+			  INSERT
+			  VALUES
+			    (#{phy_port_id,jdbcType=NUMERIC},'80002001','170351',#{new_port_rf_id,jdbcType=VARCHAR},(select staff_Id from ${odnmain}.unpower_device_staff s where s.staff_nbr = #{staffId,jdbcType=VARCHAR}),sysdate,'','','',(select parent_area_id from ${odnmain}.spc_area where area_id = #{area,jdbcType=NUMERIC}))
+	</update>
+	
+	<update id ="saveRfIdLog"  parameterType="map">
+		insert into unpower_device_log (work_order_id,staff_id,order_event,phy_port_id,phy_port_opr,new_rf_id,old_rf_id,create_date)
+		values(#{orderId,jdbcType=VARCHAR},(select staff_Id from ${odnmain}.unpower_device_staff s where s.staff_nbr = #{staffId,jdbcType=VARCHAR}),#{orderEvent,jdbcType=VARCHAR},#{phy_port_id,jdbcType=NUMERIC},#{phy_port_opr,jdbcType=VARCHAR},#{new_fiber_rf_id,jdbcType=VARCHAR},#{old_fiber_rf_id,jdbcType=VARCHAR},sysdate)
+	</update>
+	
+	<select id ="checkLockRfid" resultType ="map" >
+		select * from unpower_device_lock_permission msdp
+		join phy_obj_rfid mdp on mdp.obj_id = msdp.device_id
+		join ${odnmain}.unpower_device_staff muds on muds.staff_id = msdp.staff_id
+		where muds.staff_nbr = #{staffId} and mdp.prop_spec_id = '80002000' and mdp.value = #{rfId}
+	</select>
+	
+	<insert id ="saveLockLog" >
+		insert into UNPOWER_DEVICE_LOCK_LOG (staff_id,opr,device_id,create_date)
+		values((select staff_Id from ${odnmain}.unpower_device_staff s where s.staff_nbr = #{staffId,jdbcType=VARCHAR}),#{opr,jdbcType=VARCHAR},(select obj_id from phy_obj_rfid where prop_spec_id = '80002000' AND value =  #{rfId,jdbcType=VARCHAR}),sysdate)
+	</insert>
+	
+	<!-- select id = "getPortsInfoByDeviceNo" resultType = "map">
+			select PE.PHY_EQP_ID,
+	           PE.NAME PHY_EQP_NAME,
+	           PEP.VALUE PE_RFID,
+	           PTP.PHY_PORT_ID,
+	           PE.NO PHY_EQP_NO,
+	           PTP.NO PHY_PORT_NO,
+	           LBL.NO GL_NO,
+	           PTP.SEQ_IN_UNIT PHY_PORT_SEQ,
+	           PTPP.VALUE PHY_PORT_RFID,
+	           PTPP2.VALUE PHY_FIBER_RFID,
+	           peu.unit_id SLOT_ID,
+	           '[' || PRS.NAME || ']' || PEU.NO SLOT_NO,
+	           PEU.SEQUENCE SLOT_SEQ,
+	           PEUR.VALUE SLOT_RFID,
+	           '[' || PRS2.NAME || ']' || PEU2.NO FRAME_NO,
+	           PEU2.SEQUENCE FRAME_SEQ,
+	           '[' || PRS3.NAME || ']' || PEU3.NO SHELF_NO,
+	           PEU3.SEQUENCE SHELF_SEQ
+	      from PHY_EQUIPMENT PE
+	      JOIN PHY_TERM_PORT PTP
+	        ON PTP.PHY_EQP_ID = PE.PHY_EQP_ID
+	      LEFT OUTER JOIN phy_obj_rfid PTPP 
+	        ON PTPP.OBJ_ID = PTP.PHY_PORT_ID AND PTPP.PROP_SPEC_ID = 80002001
+	      LEFT OUTER JOIN phy_obj_rfid PEP 
+	        ON PEP.OBJ_ID = PE.PHY_EQP_ID AND PEP.PROP_SPEC_ID = 80002003
+	      LEFT OUTER JOIN phy_obj_rfid PTPP2 
+	        ON PTPP2.OBJ_ID = PTP.PHY_PORT_ID AND PTPP2.PROP_SPEC_ID = 80002002
+	      LEFT OUTER JOIN LNK_PHY_LINK_COMPONENT C
+	        ON (C.A_PHY_PORT_ID = PTP.PHY_PORT_ID OR C.Z_PHY_PORT_ID = PTP.PHY_PORT_ID) AND C.BUILD_TYPE_ID =80000406
+	      LEFT OUTER JOIN LNK_BUSI_LINK_2_LINK B2L ON B2L.LINK_ID = C.LINK_ID
+	      LEFT OUTER JOIN LNK_BUSINESS_LINK LBL ON LBL.BUSI_LINK_ID = B2L.BUSI_LINK_ID
+	      JOIN PHY_EQP_UNIT PEU
+	        ON PEU.UNIT_ID = PTP.UNIT_ID
+	      LEFT OUTER JOIN phy_obj_rfid PEUR
+	        ON PEUR.OBJ_ID = PTP.UNIT_ID AND PEUR.PROP_SPEC_ID = 80002004
+	      JOIN PUB_RESOURCE_SPEC PRS
+	        ON PRS.RES_SPEC_ID = PEU.RES_SPEC_ID
+	      JOIN PHY_EQP_UNIT PEU2
+	        ON PEU2.UNIT_ID = PEU.PARENT_UNIT_ID
+	      JOIN PUB_RESOURCE_SPEC PRS2
+	        ON PRS2.RES_SPEC_ID = PEU2.RES_SPEC_ID
+	      JOIN PHY_EQP_UNIT PEU3
+	        ON PEU3.UNIT_ID = PEU2.PARENT_UNIT_ID
+	      JOIN PUB_RESOURCE_SPEC PRS3
+	        ON PRS3.RES_SPEC_ID = PEU3.RES_SPEC_ID
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">  
+        <choose>  
+            <when test="deviceNo != null and deviceNo != '' ">  
+                AND PE.NO = #{deviceNo}
+            </when>  
+            <when test="deviceRfid != null and deviceRfid != '' ">  
+                AND PEP.value = #{deviceRfid}  
+            </when>  
+            <otherwise>  
+                AND PE.NO  = 'error'  
+            </otherwise>  
+        </choose>  
+    </trim> 
+		 order by PEU3.SEQUENCE,PEU2.SEQUENCE,PEU.SEQUENCE,PTP.SEQ_IN_UNIT
+	</select -->
+	
+	<select id="getPortInfoByFiberRfId" resultType="DevicePortInfo" resultMap="DevicePortInfoMap.DevicePortInfoResultMap">
+			select distinct rownum, pe.no phy_eqp_no,
+		       pe.phy_eqp_id,
+		       prs.name phy_res_spec,
+		       p.no phy_port_no,
+		       p.unit_id,
+		       p.phy_port_id,
+		       f.value phy_port_rfid,
+		       f2.value phy_joint_rfid,
+		       '第'||p.row_no||'行第'||p.column_no||'个' phy_port_location,
+		       (select u.no||'(第'||u.row_no||'行第'||u.column_no||'个)' from phy_eqp_unit u where u.unit_id = p.unit_id) phy_slot_location,
+		       (select u2.no 
+		          from phy_eqp_unit u
+		          join phy_eqp_unit u2
+		            on u2.unit_id = u.parent_unit_id
+		         where u.unit_id = p.unit_id) phy_frame_location,
+		       (select u3.no
+		          from phy_eqp_unit u
+		          join phy_eqp_unit u2
+		            on u2.unit_id = u.parent_unit_id
+		          join phy_eqp_unit u3
+		            on u3.unit_id = u2.parent_unit_id
+		         where u.unit_id = p.unit_id) phy_shelf_location
+		  from phy_term_port p
+		  left outer join phy_obj_rfid f
+		    on f.obj_id = p.phy_port_id
+		   and f.prop_spec_id = '80002001'
+		  left outer join phy_obj_rfid f2
+		    on f2.obj_id = p.phy_port_id
+		  join phy_equipment pe
+		    on pe.phy_eqp_id = p.phy_eqp_id
+		  join pub_resource_spec prs
+		    on prs.res_spec_id = pe.res_spec_id
+		  where f2.value = #{fiberRfid} order by rownum desc
+	</select>
+	
+	<select id ="getOtherPortByPortId" resultType ="string">
+	select z_phy_port_id from lnk_phy_link_component c where c.a_phy_port_id = #{portId} and c.build_type_id = 80000406
+  	union all
+  	select a_phy_port_id from lnk_phy_link_component c where c.z_phy_port_id = #{portId} and c.build_type_id = 80000406
+	</select>
+	
+	<select id ="getPortInfoByFiberPortId" resultType="DevicePortInfo" resultMap="DevicePortInfoMap.DevicePortInfoResultMap">
+		select distinct pe.no phy_eqp_no,
+		       pe.phy_eqp_id,
+		       prs.name phy_res_spec,
+		       p.no phy_port_no,
+		       p.unit_id,
+		       p.phy_port_id,
+		       f.value phy_port_rfid,
+		       f2.value phy_joint_rfid,
+		       '第'||p.row_no||'行第'||p.column_no||'个' phy_port_location,
+		       (select u.no from phy_eqp_unit u where u.unit_id = p.unit_id) phy_slot_location,
+		       (select u2.no 
+		          from phy_eqp_unit u
+		          join phy_eqp_unit u2
+		            on u2.unit_id = u.parent_unit_id
+		         where u.unit_id = p.unit_id) phy_frame_location,
+		       (select u3.no
+		          from phy_eqp_unit u
+		          join phy_eqp_unit u2
+		            on u2.unit_id = u.parent_unit_id
+		          join phy_eqp_unit u3
+		            on u3.unit_id = u2.parent_unit_id
+		         where u.unit_id = p.unit_id) phy_shelf_location
+		  from phy_term_port p
+		  left outer join phy_obj_rfid f
+		    on f.obj_id = p.phy_port_id
+		   and f.prop_spec_id = '80002001'
+		  left outer join phy_obj_rfid f2
+		    on f2.obj_id = p.phy_port_id
+		   and f2.prop_spec_id = '80002002'
+		  join phy_equipment pe
+		    on pe.phy_eqp_id = p.phy_eqp_id
+		  join pub_resource_spec prs
+		    on prs.res_spec_id = pe.res_spec_id
+		  where p.phy_port_id = #{portId}
+	</select>
+	
+	<select id ="getGlInfoByPorts" resultType = 'map'>
+		select lbl.no GL_NO,PS.NAME LNK_STATE,(select WM_CONCAT(SA.FULL_NAME) from phy_equipment pe 
+		  JOIN PHY_EQP_2_LOCATION P2L ON P2L.PHY_EQP_ID = PE.PHY_EQP_ID
+		  JOIN SPC_ADDRESS SA ON SA.LOCATION_ID = P2L.LOCATION_ID
+		  where pe.phy_eqp_id in(
+		  select c2.a_phy_eqp_id from lnk_phy_link_component c2  where c2.link_id =C.LINK_ID
+		  union all
+		  select c2.z_phy_eqp_id from lnk_phy_link_component c2  where c2.link_id =C.LINK_ID)
+		  AND PE.RES_SPEC_ID IN(
+		  424,425,426,486,487,488,489)) ADDRESS from lnk_phy_link_component c 
+		  join lnk_busi_link_2_link b2l on b2l.link_id = c.link_id
+		  join lnk_business_link lbl on lbl.busi_link_id = b2l.busi_link_id
+		  JOIN LNK_LINK LL ON LL.LINK_ID = C.LINK_ID
+		  JOIN PUB_STATUS PS ON PS.STATE_ID = LL.OPR_STATE_ID
+		  where (c.a_phy_port_id = #{otherPortId} and c.z_phy_port_id = #{portId}
+		  or c.z_phy_port_id = #{otherPortId} and c.a_phy_port_id = #{portId})
+	</select>
+	
+	<delete id="deletePortRfId" parameterType="PortRfidInfo">
+		delete from phy_obj_rfid p where p.obj_id = #{phy_port_id,jdbcType=VARCHAR} AND PROP_SPEC_ID = 80002001 
+	</delete>
+	
+	<delete id="deleteFiberRfId" parameterType="PortRfidInfo">
+		delete from phy_obj_rfid p where p.obj_id = #{phy_port_id,jdbcType=VARCHAR} AND PROP_SPEC_ID = 80002002 
+	</delete>
+	
+	<!-- 巡检结果保存 -->
+	<insert id  ="saveCheckResult" parameterType="PortRfidInfo">
+		insert into unpower_device_check_result r 
+		(staff_id,area,phy_port_id,rf_id,phy_port_opr,create_date)
+		values (
+		(select staff_Id from ${odnmain}.unpower_device_staff s where s.staff_nbr = #{staffId,jdbcType=NUMERIC}),#{area,jdbcType=VARCHAR},#{phy_port_id,jdbcType=NUMERIC},#{new_fiber_rf_id,jdbcType=VARCHAR},#{phy_port_opr},sysdate
+		)
+	</insert>
+	
+	<!-- 绑定模块信息 -->
+	<update id="saveSlotRfid" parameterType="java.util.HashMap">
+		MERGE INTO phy_obj_rfid p
+			USING (select #{OBJ_ID} phy_port_id from dual) np
+			ON (p.obj_id = np.phy_port_id AND p.prop_spec_id = #{PROP_SPEC_ID,jdbcType=NUMERIC}) 
+			WHEN MATCHED THEN
+			  UPDATE
+			     SET p.value = #{VALUE,jdbcType=VARCHAR}
+			   WHERE p.obj_id = #{OBJ_ID,jdbcType=NUMERIC} AND p.prop_spec_id = #{PROP_SPEC_ID,jdbcType=NUMERIC} 
+			WHEN NOT MATCHED THEN
+			  INSERT
+			  VALUES
+			    (#{OBJ_ID,jdbcType=NUMERIC},#{PROP_SPEC_ID,jdbcType=NUMERIC},'170351',#{VALUE,jdbcType=VARCHAR},(select staff_Id from ${odnmain}.unpower_device_staff s where s.staff_nbr = #{STAFF_NBR,jdbcType=VARCHAR}),sysdate,'','','',(select parent_area_id from ${odnmain}.spc_area where area_id = #{AREA_ID,jdbcType=NUMERIC}))
+	</update>
+	
+	<delete id="deleteSlotRfid" parameterType="java.util.HashMap">
+		delete from phy_obj_rfid p where p.obj_id = #{OBJ_ID,jdbcType=VARCHAR} AND PROP_SPEC_ID = #{PROP_SPEC_ID,jdbcType=NUMERIC} AND P.VALUE = #{VALUE,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 通过端口Rfid查询设备和模块信息 -->
+	<select id = "getPortsInfoByDeviceNo" resultType = "map">
+		select distinct PE.PHY_EQP_ID,
+		                 PE.NAME PHY_EQP_NAME,
+		                 PEP.VALUE PE_RFID,
+		                 PTP.PHY_PORT_ID,
+		                 PE.NO PHY_EQP_NO,
+		                 PTP.NO PHY_PORT_NO,
+		                 LBL.NO GL_NO,
+		                 PTP.SEQ_IN_UNIT PHY_PORT_SEQ,
+		                 PTPP.VALUE PHY_PORT_RFID,
+		                 PTPP2.VALUE PHY_FIBER_RFID,
+		                 peu.unit_id SLOT_ID,
+		                 '[' || PRS.NAME || ']' || PEU.NO SLOT_NO,
+		                 PEU.SEQUENCE SLOT_SEQ,
+		                 PEUR.VALUE SLOT_RFID,
+		                 '[' || PRS2.NAME || ']' || PEU2.NO FRAME_NO,
+		                 PEU2.SEQUENCE FRAME_SEQ,
+		                 '[' || PRS3.NAME || ']' || PEU3.NO SHELF_NO,
+		                 PEU3.SEQUENCE SHELF_SEQ,
+		                 PTP.RES_SPEC_ID
+		   from PHY_EQUIPMENT PE
+		   JOIN PHY_TERM_PORT PTP
+		     ON PTP.PHY_EQP_ID = PE.PHY_EQP_ID
+		   LEFT OUTER JOIN phy_obj_rfid PTPP
+		     ON PTPP.OBJ_ID = PTP.PHY_PORT_ID
+		    AND PTPP.PROP_SPEC_ID = 80002001
+		   LEFT OUTER JOIN phy_obj_rfid PEP
+		     ON PEP.OBJ_ID = PE.PHY_EQP_ID
+		    AND PEP.PROP_SPEC_ID = 80002003
+		   LEFT OUTER JOIN phy_obj_rfid PTPP2
+		     ON PTPP2.OBJ_ID = PTP.PHY_PORT_ID
+		    AND PTPP2.PROP_SPEC_ID = 80002002
+		   LEFT OUTER JOIN LNK_PHY_LINK_COMPONENT C
+		     ON (C.A_PHY_PORT_ID = PTP.PHY_PORT_ID OR
+		        C.Z_PHY_PORT_ID = PTP.PHY_PORT_ID)
+		    AND C.BUILD_TYPE_ID = 80000406
+		   LEFT OUTER JOIN LNK_BUSI_LINK_2_LINK B2L
+		     ON B2L.LINK_ID = C.LINK_ID
+		   LEFT OUTER JOIN LNK_BUSINESS_LINK LBL
+		     ON LBL.BUSI_LINK_ID = B2L.BUSI_LINK_ID
+		   JOIN PHY_EQP_UNIT PEU
+		     ON PEU.UNIT_ID = PTP.UNIT_ID
+		   LEFT OUTER JOIN phy_obj_rfid PEUR
+		     ON PEUR.OBJ_ID = PTP.UNIT_ID
+		    AND PEUR.PROP_SPEC_ID = 80002004
+		   JOIN PUB_RESOURCE_SPEC PRS
+		     ON PRS.RES_SPEC_ID = PEU.RES_SPEC_ID
+		   LEFT OUTER JOIN PHY_EQP_UNIT PEU2
+		     ON PEU2.UNIT_ID = PEU.PARENT_UNIT_ID
+		  LEFT OUTER JOIN PUB_RESOURCE_SPEC PRS2
+		     ON PRS2.RES_SPEC_ID = PEU2.RES_SPEC_ID
+		   LEFT OUTER JOIN PHY_EQP_UNIT PEU3
+		     ON PEU3.UNIT_ID = PEU2.PARENT_UNIT_ID
+		   LEFT OUTER JOIN PUB_RESOURCE_SPEC PRS3
+		     ON PRS3.RES_SPEC_ID = PEU3.RES_SPEC_ID
+		
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">  
+	        <choose>
+	            <when test="deviceNo != null and deviceNo != '' ">  
+	                AND PE.NO = #{deviceNo}
+	            </when>  
+	            <when test="deviceRfid != null and deviceRfid != '' ">  
+	                AND PE.NO = (select LSPE.NO
+			        from PHY_EQUIPMENT LSPE
+			        JOIN PHY_TERM_PORT LSPTP
+			          ON LSPTP.PHY_EQP_ID = LSPE.PHY_EQP_ID
+			       JOIN phy_obj_rfid LSPTPP 
+			          ON LSPTPP.OBJ_ID = LSPTP.PHY_PORT_ID AND LSPTPP.PROP_SPEC_ID = 80002001 and LSPTPP.value=#{deviceRfid}
+			         where rownum=1)
+	            </when>  
+	            <otherwise>
+	                AND PE.NO  = 'error'
+	            </otherwise>  
+	        </choose>  
+    	</trim> 
+		 order by PEU3.SEQUENCE,PEU2.SEQUENCE,PEU.SEQUENCE,PTP.SEQ_IN_UNIT
+	</select>
+	
+	<select id="getDevsPortCount" resultType="String">
+	     SELECT  COUNT(*) FROM  PHY_EQUIPMENT PE
+	     JOIN PHY_TERM_PORT PTP   ON PTP.PHY_EQP_ID = PE.PHY_EQP_ID
+	     
+	     left outer join lnk_phy_link_component c on (c.a_phy_port_id = PTP.phy_port_id or c.z_phy_port_id = PTP.phy_port_id) and c.build_type_id = 80000406
+      	 AND (c.a_phy_eqp_id = pe.phy_eqp_id or c.z_phy_eqp_id = pe.phy_eqp_id)
+      	 
+         where  PE.NO = #{deviceNo}  AND  PTP.NO=#{portNo}
+	</select>
+	
+	<select id="listDevsInfoByArea" resultType="map">
+		select pe.name as phy_eqp_name,pe.no as phy_eqp_no,phy_eqp_id from phy_equipment  pe where pe.res_spec_id=703  
+		 and pe.area_id=(select area from ${odnmain}.unpower_device_staff where staff_id=#{map.staffId,jdbcType=NUMERIC})
+	</select>
+	
+	<!--select id="getDeviceInfolistPage" resultType="list" resultMap = "DevicePortInfoMap.DevicePortInfoResultMap" parameterType="int">
+		select pe.name as phy_eqp_name,pe.no as phy_eqp_no,pe.phy_eqp_id from phy_equipment  pe
+     	join dev_lock_man dl on dl.phy_eqp_id=pe.phy_eqp_id
+     	
+		where pe.res_spec_id=703
+		 and pe.area_id=(select area from ${odnmain}.unpower_device_staff where staff_id=#{map.staffId,jdbcType=NUMERIC})
+	</select-->
+	<select id="getDeviceInfolistPage" resultType="list" resultMap = "DevicePortInfoMap.DevicePortInfoResultMap">
+	 	select pe.name as phy_eqp_name,pe.no as phy_eqp_no,pe.phy_eqp_id from phy_equipment  pe
+     	join dev_lock_man dl on dl.phy_eqp_id=pe.phy_eqp_id
+
+       <trim prefix="WHERE" prefixOverrides="AND |OR ">
+	       
+	            <if test="map.deviceNo != null and map.deviceNo != '' ">  
+	                AND pe.no like '%${map.deviceNo}%'
+	            </if>  
+	            <if test="map.areaId != null and map.areaId != '' ">  
+	                AND pe.area_id=#{map.areaId}  
+	            </if>
+    	</trim>
+	
+	</select>
+	
+	<select id="getDevPosition" resultType="map">
+		select device_id,longitude,latitude from dev_position dp,PHY_EQUIPMENT pt where pt.PHY_EQP_ID = dp.DEVICE_ID and pt.NO = #{deviceNo} 
+	</select>
+	
+	<update id="saveDevPosition"> 
+		MERGE INTO dev_position p
+			USING (select #{deviceId} device_id from dual) np
+			ON (np.device_id=p.device_id)
+			WHEN MATCHED THEN
+			  UPDATE
+			     SET
+			     	p.longitude = #{longitude},
+			     	p.latitude = #{latitude},
+			     	p.staff_nbr = #{staffNbr},
+			     	p.input_date = sysdate
+			WHEN NOT MATCHED THEN
+			  INSERT
+			  VALUES
+			    (#{deviceId},#{longitude},#{latitude},#{staffNbr},sysdate)
+	</update>
+	
+	<select id="getDeviceCount" resultType="String">
+		 SELECT  COUNT(*) FROM  PHY_EQUIPMENT PE  where PE.NO=#{deviceNo}
+	</select>
+
+</mapper>

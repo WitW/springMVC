@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ActionInfoMap">
+	<resultMap type="com.zbiti.common.model.ActionInfo" id="ActionInfoResultMap">
+		<result property="actionId" column="action_id" jdbcType="NUMERIC"/>
+		<result property="actionName" column="action_name" jdbcType="VARCHAR"/>
+		<result property="actionType" column="action_type" jdbcType="NUMERIC"/>
+	</resultMap>
+</mapper>

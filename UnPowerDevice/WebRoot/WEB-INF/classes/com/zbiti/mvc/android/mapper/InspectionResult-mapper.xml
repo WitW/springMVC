@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.zbiti.mvc.android.mapper.InspectionResultMapper">
+	<!-- id和mapper接口中的方法名对应，resultType使用mybatis.xml中的别名 -->
+	
+	<select id="getAllInspectionResultlistPage" resultType="map">
+	  SELECT B.NO,to_char(C.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss') CREATE_DATE,C.RESULT_ID,B.PHY_EQP_ID,B.RES_SPEC_ID,C.RESULT_COUNT,C.STAFFID
+      FROM PHY_EQUIPMENT B,CHECK_INFO C,PUB_RESOURCE_SPEC D 
+      WHERE B.NO = C.DEVICENO
+      AND  D.RES_SPEC_ID = B.RES_SPEC_ID
+	</select>
+	
+	<!-- 根据设备编码查询所有信息 -->
+	<select id="selectAllDeviceInfo" resultType="map">
+	select distinct PE.PHY_EQP_ID,
+                     PE.NAME PHY_EQP_NAME,
+                     PTP.PHY_PORT_ID,
+                     PE.NO PHY_EQP_NO,
+                     PTP.NO PHY_PORT_NO,
+                     PTP.SEQ_IN_UNIT PHY_PORT_SEQ,
+                     peu.unit_id SLOT_ID,
+                     '[' || PRS.NAME || ']' || PEU.NO SLOT_NO,
+                     PEU.SEQUENCE SLOT_SEQ,
+                     '[' || PRS2.NAME || ']' || PEU2.NO FRAME_NO,
+                     PEU2.SEQUENCE FRAME_SEQ,
+                     '[' || PRS3.NAME || ']' || PEU3.NO SHELF_NO,
+                     PEU3.SEQUENCE SHELF_SEQ,
+                     PTP.RES_SPEC_ID
+       from PHY_EQUIPMENT PE
+       JOIN PHY_TERM_PORT PTP
+         ON PTP.PHY_EQP_ID = PE.PHY_EQP_ID
+       LEFT OUTER JOIN phy_obj_rfid PTPP
+         ON PTPP.OBJ_ID = PTP.PHY_PORT_ID
+        AND PTPP.PROP_SPEC_ID = 80002001
+       JOIN PHY_EQP_UNIT PEU
+         ON PEU.UNIT_ID = PTP.UNIT_ID
+       JOIN PUB_RESOURCE_SPEC PRS
+         ON PRS.RES_SPEC_ID = PEU.RES_SPEC_ID
+       LEFT OUTER JOIN PHY_EQP_UNIT PEU2
+         ON PEU2.UNIT_ID = PEU.PARENT_UNIT_ID
+      LEFT OUTER JOIN PUB_RESOURCE_SPEC PRS2
+         ON PRS2.RES_SPEC_ID = PEU2.RES_SPEC_ID
+       LEFT OUTER JOIN PHY_EQP_UNIT PEU3
+         ON PEU3.UNIT_ID = PEU2.PARENT_UNIT_ID
+       LEFT OUTER JOIN PUB_RESOURCE_SPEC PRS3
+         ON PRS3.RES_SPEC_ID = PEU3.RES_SPEC_ID
+    where  PE.NO = #{deviceNo,jdbcType=VARCHAR}
+     order by PEU3.SEQUENCE,PEU2.SEQUENCE,PEU.SEQUENCE,PTP.SEQ_IN_UNIT
+	</select>
+	
+	
+	<!-- 根据设备编码查询设备下所有的 端口ID-->
+	<select id="deviceNo_portTD_map" resultType="map">
+	SELECT  B.PHY_PORT_ID  
+	FROM PHY_TERM_PORT B 
+	WHERE 
+	B.PHY_EQP_ID = (SELECT A.PHY_EQP_ID FROM PHY_EQUIPMENT A WHERE A.NO = #{map_deviceNo_portId.deviceNo,jdbcType=VARCHAR}) 
+	ORDER BY B.PHY_PORT_ID
+	</select>
+	
+	<!-- 查看CHECK_INFO表中的最大的RESULT_ID -->
+	<select id="get_MAX_RESULT_ID" resultType="map">
+	SELECT MAX(A.RESULT_ID) MAX_RESULT_ID FROM CHECK_INFO A
+	</select>
+	
+	<!-- 巡检端口，插头信息的插入 -->
+	<insert id="saveResultCheckInfo">
+	INSERT INTO CHECK_RESULT
+	(PHY_PORT_ID,OSS_RF_ID,RF_ID,CHECK_RESULT,RESULT_ID) 
+	VALUES
+	(#{phy_port_id,jdbcType=NUMERIC},#{oss_rf_id,jdbcType=VARCHAR},#{new_rf_id,jdbcType=VARCHAR},#{check_result,jdbcType=NUMERIC},#{result_id,jdbcType=NUMERIC})
+	</insert>
+	
+	<!-- 巡检结果信息表数据插入 -->
+	<insert id="saveCheckInfo">
+		INSERT INTO CHECK_INFO  
+		(RESULT_ID,STAFFID,DEVICENO,RESULT_COUNT,CREATE_DATE) 
+		VALUES 
+		(#{result_id,jdbcType=NUMERIC},#{staffId,jdbcType=VARCHAR},#{deviceNO,jdbcType=VARCHAR},#{result_count,jdbcType=NUMERIC},to_date(#{create_date,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+	</insert>
+	
+	<!-- 查询巡检结果信息表 -->
+	<select id="getInspectionResultlistPage" resultType="map">
+	  SELECT B.NO,to_char(C.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss') CREATE_DATE,C.RESULT_ID,B.PHY_EQP_ID,B.RES_SPEC_ID,C.RESULT_COUNT,C.STAFFID
+      FROM PHY_EQUIPMENT B,CHECK_INFO C,PUB_RESOURCE_SPEC D 
+      WHERE B.NO = C.DEVICENO
+      AND  D.RES_SPEC_ID = B.RES_SPEC_ID
+  	  <if test="map.deviceNo != '' and map.deviceNo != null">
+  	  AND B.NO LIKE '%${map.deviceNo}%'
+  	  </if>
+  	  <if test="map.inspectionTime1 != null and map.inspectionTime2 != null and map.inspectionTime1 != '' and map.inspectionTime2 != ''">
+  	  	AND C.CREATE_DATE BETWEEN to_date(#{map.inspectionTime1,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss') AND to_date(#{map.inspectionTime2,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+  	  </if>
+  	   ORDER BY C.CREATE_DATE DESC
+  	 <!--  GROUP BY  B.NO,C.CREATE_DATE,A.STAFF_NBR,C.RESULT_ID  -->
+	</select>
+	
+	<!-- 查询分光器下面的OUT端口ID -->
+	<select id="getSplitterPortID" resultType="map">
+	SELECT A.PHY_PORT_ID,A.RES_SPEC_ID  FROM PHY_TERM_PORT A
+    WHERE A.UNIT_ID = (  SELECT B.UNIT_ID  FROM PHY_EQP_UNIT B WHERE B.PHY_EQP_ID = #{map.PHY_EQP_ID,jdbcType=VARCHAR} ) 
+    AND A.PHY_EQP_ID =  #{map.PHY_EQP_ID,jdbcType=VARCHAR}
+    AND  A.RES_SPEC_ID = '1132'
+    ORDER BY A.PHY_PORT_ID
+	</select>
+	
+	<!-- 查询IN端口的信息 -->
+	<select id="getSplitterInPortID" resultType="map">
+	SELECT A.PHY_PORT_ID,A.RES_SPEC_ID  FROM PHY_TERM_PORT A
+    WHERE A.UNIT_ID = (  SELECT B.UNIT_ID  FROM PHY_EQP_UNIT B WHERE B.PHY_EQP_ID = #{map.PHY_EQP_ID,jdbcType=VARCHAR} ) 
+    AND A.PHY_EQP_ID =  #{map.PHY_EQP_ID,jdbcType=VARCHAR}
+    AND A.RES_SPEC_ID = '1131'
+	</select>
+	
+	<select id="getFramelUnitId" resultType="map">
+	  SELECT A.UNIT_ID,A.NO FROM phy_eqp_unit A 
+	  WHERE A.PHY_EQP_ID = #{map.PHY_EQP_ID,jdbcType=VARCHAR} 
+	  AND A.parent_unit_id IS NULL
+	</select>
+	
+	<select id="getSlotUnitID" resultType="map">
+	SELECT A.UNIT_ID,A.PHY_EQP_ID FROM PHY_EQP_UNIT A 
+	WHERE A.PARENT_UNIT_ID  = #{unit_id.slot_id,jdbcType=VARCHAR}
+	 ORDER BY A.UNIT_ID
+	</select>
+	
+	<select id="getUnitId" resultType="map">
+	SELECT A.UNIT_ID FROM PHY_EQP_UNIT A 
+	WHERE A.PARENT_UNIT_ID = #{umap.unit_id,jdbcType=VARCHAR}
+	AND A.PHY_EQP_ID = #{umap.phy_eqp_id,jdbcType=VARCHAR}
+	ORDER BY A.UNIT_ID
+	</select>
+	
+	
+	<select id="getAllPortID" resultType="map">
+	SELECT A.PHY_PORT_ID 
+	FROM PHY_TERM_PORT A 
+	WHERE A.UNIT_ID = #{portMap.UNIT_ID,jdbcType=VARCHAR} 
+	ORDER BY A.PHY_PORT_ID
+	</select>
+	
+	<!-- 获得结果表里面的端口ID和对应的巡检结果 -->
+	<select id="get_portID_result" resultType="map">
+	SELECT A.PHY_PORT_ID,A.CHECK_RESULT
+	FROM CHECK_RESULT A 
+	WHERE A.RESULT_ID = #{resultMap.RESULT_ID,jdbcType=VARCHAR}
+	ORDER BY A.PHY_PORT_ID
+	</select>
+
+	 <!-- 查询巡检结果
+	 <select id="getAllPortID" resultType="map">
+	SELECT A.UNIT_ID,A.PHY_PORT_ID,B.CHECK_RESULT
+  	FROM phy_term_port A 
+  	LEFT JOIN CHECK_RESULT B 
+ 	ON A.PHY_PORT_ID = B.PHY_PORT_ID
+    LEFT JOIN CHECK_INFO C
+ 	ON B.RESULT_ID = C.RESULT_ID  
+    WHERE A.UNIT_ID = #{portMap.UNIT_ID,jdbcType=VARCHAR}
+    AND C.RESULT_ID = #{portMap.RESULT_ID,jdbcType=VARCHAR}
+    ORDER BY A.PHY_PORT_ID
+	</select>
+	 -->
+	
+</mapper>
